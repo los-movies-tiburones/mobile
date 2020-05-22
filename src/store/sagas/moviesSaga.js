@@ -1,17 +1,30 @@
 /* eslint-disable prettier/prettier */
 import {put, takeEvery} from 'redux-saga/effects';
-import {setMovies, fetchAllMoviesFailed} from '../actions/movieActions';
+import {
+  setMovies,
+  fetchAllMoviesFailed,
+  changeTitle,
+} from '../actions/movieActions';
 import {FETCH_ALL_MOVIES} from '../constants/movieConstants';
 import {backendRequest} from '../../utils/axiosService';
 
 const fetchMoviesSaga = function* fetchMoviesSaga(action) {
   try {
-    console.log(action.page);
+    let paramsRequest = {
+      page: action.page,
+      size: 8,
+    };
+    if (action.title) paramsRequest.title = action.title;
+    if (action.sort) paramsRequest.sort = action.sort;
+    if (action.genres.length) paramsRequest.genres = action.genres.join(',');
 
-    const response = yield backendRequest().get(
-      `/movies?page=${action.page}&size=8&title=`,
-    );
-    yield put(setMovies(response.data));
+    const response = yield backendRequest().get('/movies', {
+      params: paramsRequest,
+    });
+
+    yield put(changeTitle(action.title));
+    yield put(setMovies(response.data, action.page === 0));
+    if (response.data.length === 0) yield put(fetchAllMoviesFailed());
   } catch (error) {
     yield put(fetchAllMoviesFailed());
   }

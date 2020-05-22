@@ -8,8 +8,6 @@ import formatDate from '../../utils/dates';
 const Movie = ({movie}) => {
   const formatBudget = (budget) =>
     budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-  formatDate('1995-12-22');
   return (
     <TouchableOpacity style={styles.listItem}>
       <View style={styles.listItemView}>
@@ -57,7 +55,7 @@ const styles = StyleSheet.create({
   listItemInformationView: {
     flex: 1,
     width: '70%',
-    height: 85,
+    height: 110,
     marginLeft: 20,
     alignSelf: 'flex-start',
   },
