@@ -12,14 +12,19 @@ import BurnedGenres from '../../utils/genres';
 
 class Header extends Component {
   state = {
-    selectedGenres: [],
+    option: '',
+    error: false,
   };
 
   onChangedGenreOption = (selectedItems) => {
     const {changeGenres, getAllMovies, sort} = this.props;
-    this.setState({selectedItems});
-    changeGenres(selectedItems);
-    getAllMovies(0, '', sort, selectedItems);
+    if (selectedItems.length <= 4) {
+      this.setState({selectedItems, error: false});
+      changeGenres(selectedItems);
+      getAllMovies(0, '', sort, selectedItems);
+    } else {
+      this.setState({error: true});
+    }
   };
   onChangedPickerOption(value) {
     const {changeSortOption, getAllMovies, genres} = this.props;
@@ -58,12 +63,25 @@ class Header extends Component {
               <Picker.Item label="Release Date" value="-year" />
               <Picker.Item label="Budget" value="-budget" />
             </Picker>
+            <Icon
+              style={styles.arrowIcon}
+              name="arrow-drop-down"
+              size={25}
+              color="white"
+            />
           </View>
         </View>
+        {this.state.error ? (
+          <Text style={styles.errorText}>4 genres max</Text>
+        ) : null}
         <MultiSelect
           hideTags
+          hideDropdown
           items={BurnedGenres}
           uniqueKey="name"
+          ref={(component) => {
+            this.multiSelect = component;
+          }}
           onSelectedItemsChange={this.onChangedGenreOption}
           selectedItems={selectedItems}
           selectText="Genres"
@@ -73,13 +91,13 @@ class Header extends Component {
           tagTextColor="#FFFFFF"
           itemTextColor="#CCC"
           displayKey="name"
-          searchInputStyle={styles.notDisplay}
           submitButtonColor="#000000"
-          submitButtonText="Ok"
-          styleListContainer={{backgroundColor: '#000000'}}
+          submitButtonText="Done"
+          styleListContainer={styles.blackBackground}
           styleDropdownMenu={styles.styleDropdownMenu}
           styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
-          styleInputGroup={styles.notDisplay}
+          styleInputGroup={styles.blackBackground}
+          searchInputStyle={styles.blackBackground}
           styleTextDropdown={styles.dropdownText}
           styleTextDropdownSelected={styles.dropdownText}
         />
@@ -166,6 +184,25 @@ const styles = StyleSheet.create({
   },
   notDisplay: {
     display: 'none',
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#FFFFFF',
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    lineHeight: 21,
+    backgroundColor: '#00000000',
+    marginLeft: 20,
+  },
+  blackBackground: {
+    backgroundColor: '#000000',
+  },
+  arrowIcon: {
+    position: 'absolute',
+    right: 12,
+    top: 0,
+    marginRight: 20,
   },
 });
 
