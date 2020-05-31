@@ -2,33 +2,28 @@
 import React from 'react';
 
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
-import formatDate from '../../utils/dates';
-
-const Movie = ({movie}) => {
-  const formatBudget = (budget) =>
-    budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+const Movie = ({movie, navigation}) => {
   return (
-    <TouchableOpacity style={styles.listItem}>
+    <TouchableOpacity
+      style={styles.listItem}
+      onPress={() => navigation.navigate('Movie', {id: movie.id})}>
       <View style={styles.listItemView}>
         <Image
           style={styles.image}
           source={movie.cover ? {uri: movie.cover} : null}
         />
-        <View style={styles.listItemInformationView}>
-          <View style={styles.headerView}>
-            <View style={styles.titleView}>
-              <Text style={styles.movieTitle}>{movie.title}</Text>
-              <Text style={styles.movieDate}>{formatDate(movie.year)}</Text>
-            </View>
-            <View style={styles.budgetView}>
-              <Text style={styles.movieBudget}>Budget</Text>
-              <Text style={styles.movieBudgetNumber}>
-                ${formatBudget(movie.budget)}
-              </Text>
-            </View>
-          </View>
-          <Text style={styles.movieCategories}>{movie.genres.join(', ')}</Text>
+        <Text style={styles.movieTitle}>{movie.title}</Text>
+        <View style={styles.movieRating}>
+          <Icon
+            style={styles.movieRatingIcon}
+            name="star"
+            size={12}
+            color="#FFC107"
+            onPress={() => this.props.changeSearchStatus()}
+          />
+          <Text style={styles.movieRatingNumber}>{movie.averageRating}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -37,39 +32,20 @@ const Movie = ({movie}) => {
 
 const styles = StyleSheet.create({
   listItem: {
-    paddingLeft: 20,
-    height: 114,
+    paddingLeft: 12,
+    paddingRight: 12,
+    height: 220,
     backgroundColor: '#00000000',
     borderColor: '#eee',
   },
   listItemView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    width: 114,
+    height: 215,
   },
   image: {
-    width: 75,
-    height: 114,
+    width: 114,
+    height: 174,
     borderRadius: 10,
-  },
-  listItemInformationView: {
-    flex: 1,
-    width: '70%',
-    height: 110,
-    marginLeft: 20,
-    alignSelf: 'flex-start',
-  },
-  headerView: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginTop: 5,
-  },
-  titleView: {
-    width: '60%',
-  },
-  budgetView: {
-    width: '40%',
   },
   movieTitle: {
     fontSize: 16,
@@ -78,44 +54,23 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'bold',
     lineHeight: 19,
+    width: '100%',
+    height: 15,
+    marginTop: 10,
   },
-  movieDate: {
-    fontSize: 13,
-    color: '#FFFFFF',
+  movieRating: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  movieRatingNumber: {
     fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: '300',
-    lineHeight: 15,
-    marginTop: 4,
-  },
-  movieCategories: {
     fontSize: 14,
+    lineHeight: 14,
     color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: '300',
-    lineHeight: 16,
-  },
-  movieBudget: {
-    fontSize: 15,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    lineHeight: 15,
-    alignSelf: 'flex-end',
-    marginEnd: 15,
-  },
-  movieBudgetNumber: {
-    fontSize: 15,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: '300',
-    lineHeight: 15,
-    alignSelf: 'flex-end',
-    marginEnd: 15,
-    marginTop: 4,
+    marginLeft: 4,
   },
 });
 

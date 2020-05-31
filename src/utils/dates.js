@@ -25,4 +25,8 @@ const formatDate = (date) => {
     return date;
   }
 };
-export default formatDate;
+
+const formatDuration = (duration) => {
+  return `${Math.floor(duration / 60)}h ${duration % 60} min`;
+};
+export {formatDate, formatDuration};

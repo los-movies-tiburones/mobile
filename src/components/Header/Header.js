@@ -2,30 +2,23 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Text, StyleSheet, Picker} from 'react-native';
-import MultiSelect from 'react-native-multiple-select';
+import {View, Text, StyleSheet} from 'react-native';
+import GenreFilter from '../GenreFilter/GenreFilter';
+import SortFilter from '../SortFilter/SortFilter';
+import SortOptions from '../../utils/sortOptions';
 
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
 import * as moviesActions from '../../store/actions/movieActions';
-import BurnedGenres from '../../utils/genres';
 
 class Header extends Component {
   state = {
     option: '',
     error: false,
+    genderFilterOn: false,
+    sortFilterOn: false,
   };
 
-  onChangedGenreOption = (selectedItems) => {
-    const {changeGenres, getAllMovies, sort} = this.props;
-    if (selectedItems.length <= 4) {
-      this.setState({selectedItems, error: false});
-      changeGenres(selectedItems);
-      getAllMovies(0, '', sort, selectedItems);
-    } else {
-      this.setState({error: true});
-    }
-  };
   onChangedPickerOption(value) {
     const {changeSortOption, getAllMovies, genres} = this.props;
     this.setState({option: value});
@@ -33,8 +26,14 @@ class Header extends Component {
     getAllMovies(0, '', value, genres);
   }
 
+  getSortTitle(value) {
+    return value === ''
+      ? 'Sort by'
+      : SortOptions.find((sortOption) => sortOption.value === value).key;
+  }
+
   render() {
-    const {selectedItems} = this.state;
+    const {genderFilterOn, sortFilterOn} = this.state;
     return (
       <View>
         <View style={styles.appTitleView}>
@@ -51,18 +50,31 @@ class Header extends Component {
 
         <View style={styles.firstLabel}>
           <Text style={styles.firstLabelText}>All Movies</Text>
-          <View style={styles.firstLabelSort}>
-            <Picker
-              selectedValue={this.state.option}
-              style={styles.picker}
-              onValueChange={(itemValue, itemIndex) =>
-                this.onChangedPickerOption(itemValue)
+          <View style={styles.genreLabel}>
+            <Text
+              style={styles.filterText}
+              onPress={() =>
+                this.setState({genderFilterOn: !this.state.genderFilterOn})
               }>
-              <Picker.Item label="Sort by" value="" />
-              <Picker.Item label="Title" value="title" />
-              <Picker.Item label="Release Date" value="-year" />
-              <Picker.Item label="Budget" value="-budget" />
-            </Picker>
+              {this.props.genres.length > 0
+                ? `${this.props.genres.length} selected`
+                : 'All Genres'}
+            </Text>
+            <Icon
+              style={styles.arrowIcon}
+              name="arrow-drop-down"
+              size={25}
+              color="white"
+            />
+          </View>
+          <View style={styles.sortLabel}>
+            <Text
+              style={styles.filterText}
+              onPress={() =>
+                this.setState({sortFilterOn: !this.state.sortFilterOn})
+              }>
+              {this.getSortTitle(this.props.sort)}
+            </Text>
             <Icon
               style={styles.arrowIcon}
               name="arrow-drop-down"
@@ -71,36 +83,8 @@ class Header extends Component {
             />
           </View>
         </View>
-        {this.state.error ? (
-          <Text style={styles.errorText}>4 genres max</Text>
-        ) : null}
-        <MultiSelect
-          hideTags
-          hideDropdown
-          items={BurnedGenres}
-          uniqueKey="name"
-          ref={(component) => {
-            this.multiSelect = component;
-          }}
-          onSelectedItemsChange={this.onChangedGenreOption}
-          selectedItems={selectedItems}
-          selectText="Genres"
-          altFontFamily="Roboto"
-          selectedItemTextColor="#FFFFFF"
-          selectedItemIconColor="blue"
-          tagTextColor="#FFFFFF"
-          itemTextColor="#CCC"
-          displayKey="name"
-          submitButtonColor="#000000"
-          submitButtonText="Done"
-          styleListContainer={styles.blackBackground}
-          styleDropdownMenu={styles.styleDropdownMenu}
-          styleDropdownMenuSubsection={styles.styleDropdownMenuSubsection}
-          styleInputGroup={styles.blackBackground}
-          searchInputStyle={styles.blackBackground}
-          styleTextDropdown={styles.dropdownText}
-          styleTextDropdownSelected={styles.dropdownText}
-        />
+        <GenreFilter filterOn={genderFilterOn} />
+        <SortFilter filterOn={sortFilterOn} />
       </View>
     );
   }
@@ -157,52 +141,30 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     backgroundColor: '#00000000',
   },
-  firstLabelSort: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
+  arrowIcon: {
+    marginTop: -6,
   },
-  picker: {
-    height: 20,
-    width: 160,
-    backgroundColor: '#00000000',
-    color: 'white',
-    marginTop: 20,
-  },
-  styleDropdownMenu: {
-    backgroundColor: '#00000000',
-    width: 150,
-    margin: 20,
-  },
-  styleDropdownMenuSubsection: {
-    backgroundColor: '#00000000',
-    borderBottomColor: '#000000',
-    width: 100,
-  },
-  dropdownText: {
-    color: '#FFFFFF',
-  },
-  notDisplay: {
-    display: 'none',
-  },
-  errorText: {
-    fontSize: 14,
+  filterText: {
+    fontSize: 12,
     color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
-    fontWeight: 'normal',
-    lineHeight: 21,
+    fontWeight: 'bold',
+    lineHeight: 14,
     backgroundColor: '#00000000',
-    marginLeft: 20,
   },
-  blackBackground: {
-    backgroundColor: '#000000',
+  genreLabel: {
+    width: '30%',
+    flex: 1,
+    flexDirection: 'row',
+    marginLeft: 100,
+    paddingTop: 10,
   },
-  arrowIcon: {
-    position: 'absolute',
-    right: 12,
-    top: 0,
-    marginRight: 20,
+  sortLabel: {
+    width: '30%',
+    flex: 1,
+    flexDirection: 'row',
+    paddingTop: 10,
   },
 });
 

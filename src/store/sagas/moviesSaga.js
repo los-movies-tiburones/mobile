@@ -12,7 +12,7 @@ const fetchMoviesSaga = function* fetchMoviesSaga(action) {
   try {
     let paramsRequest = {
       page: action.page,
-      size: 8,
+      size: 9,
     };
     if (action.title) paramsRequest.title = action.title;
     if (action.sort) paramsRequest.sort = action.sort;

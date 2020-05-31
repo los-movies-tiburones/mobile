@@ -107,7 +107,7 @@ class Catalogue extends Component {
               width: '100%',
               backgroundColor: '#00000000',
             }}
-            numColumns={1}
+            numColumns={3}
             data={
               this.props.activeSearch && !this.props.title
                 ? []
@@ -117,9 +117,9 @@ class Catalogue extends Component {
               <View
                 style={{
                   marginTop: 25,
-                  width: '100%',
+                  width: '33%',
                 }}>
-                <Movie movie={item} />
+                <Movie movie={item} navigation={this.props.navigation} />
               </View>
             )}
             keyExtractor={() => Math.random()}
