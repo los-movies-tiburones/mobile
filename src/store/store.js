@@ -6,6 +6,7 @@ import rootReducer from './reducers/index';
 
 import {MoviesSaga} from './sagas/moviesSaga';
 import {MovieDetailSaga} from './sagas/movieDetailSaga';
+import {GenreSaga} from './sagas/genreSaga';
 
 // Middleware: Redux Saga
 const sagaMiddleware = createSagaMiddleware();
@@ -19,6 +20,7 @@ const store = createStore(
 // Middleware: Redux Saga
 sagaMiddleware.run(MoviesSaga);
 sagaMiddleware.run(MovieDetailSaga);
+sagaMiddleware.run(GenreSaga);
 
 // Exports
 export {store};

@@ -34,11 +34,11 @@ class Header extends Component {
 
   render() {
     const {genderFilterOn, sortFilterOn} = this.state;
+    const {allGenres} = this.props;
     return (
       <View>
         <View style={styles.appTitleView}>
-          <Text style={styles.appTitle}>Movie</Text>
-          <Text style={styles.appTitleYellow}>Sharkers</Text>
+          <Text style={styles.appTitle}>Movie Sharkers</Text>
           <Icon
             style={styles.searchIcon}
             name="search"
@@ -65,6 +65,9 @@ class Header extends Component {
               name="arrow-drop-down"
               size={25}
               color="white"
+              onPress={() =>
+                this.setState({genderFilterOn: !this.state.genderFilterOn})
+              }
             />
           </View>
           <View style={styles.sortLabel}>
@@ -80,10 +83,13 @@ class Header extends Component {
               name="arrow-drop-down"
               size={25}
               color="white"
+              onPress={() =>
+                this.setState({sortFilterOn: !this.state.sortFilterOn})
+              }
             />
           </View>
         </View>
-        <GenreFilter filterOn={genderFilterOn} />
+        <GenreFilter filterOn={genderFilterOn} allGenres={allGenres} />
         <SortFilter filterOn={sortFilterOn} />
       </View>
     );
@@ -106,16 +112,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     lineHeight: 23,
     backgroundColor: '#00000000',
-  },
-  appTitleYellow: {
-    fontSize: 20,
-    color: '#FFB904',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    lineHeight: 23,
-    backgroundColor: '#00000000',
-    marginLeft: 4,
   },
   searchIcon: {
     position: 'absolute',

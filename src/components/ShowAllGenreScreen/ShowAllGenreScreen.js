@@ -2,74 +2,63 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import LinearGradient from 'react-native-linear-gradient';
 
 import {
-  Dimensions,
   View,
-  FlatList,
-  ActivityIndicator,
   Text,
   StyleSheet,
+  Dimensions,
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
 
-// presentational components
+//Components
+import LinearGradient from 'react-native-linear-gradient';
+import NavigationHeader from '../NavigationHeader/NavigationHeader';
 import Movie from '../Movie/Movie';
-import Header from '../Header/Header';
-import SearchHeader from '../SearchHeader/SearchHeader';
 
-//actions
-import * as moviesActions from '../../store/actions/movieActions';
+//Actions
 import * as genreActions from '../../store/actions/genreActions';
 
-// screen height and width
 const {width, height} = Dimensions.get('window');
 
-class Catalogue extends Component {
+class ShowAllGenreScreen extends Component {
   state = {
     data: [],
     page: 0,
-    refreshing: false,
     error: null,
   };
 
   componentDidMount() {
-    const {getGenres, allGenres} = this.props;
-    if (!allGenres.length) getGenres();
-    this.fetchAllMovies();
+    const {clearMovies} = this.props;
+    clearMovies();
+    this.fetchMoviesByGenre();
   }
 
-  fetchAllMovies = () => {
+  fetchMoviesByGenre = () => {
     const {page} = this.state;
-    const {getAllMovies, title, sort, genres} = this.props;
-    getAllMovies(page, title, sort, genres);
-  };
-
-  _handleRefresh = () => {
-    const {refresh} = this.props;
-    refresh();
-    this.setState(
-      {
-        page: 0,
-      },
-      () => {
-        this.fetchAllMovies();
-      },
-    );
+    const {getMoviesByGenre, route} = this.props;
+    const {genre} = route.params;
+    getMoviesByGenre(genre, page);
   };
 
   _handleLoadMore = () => {
-    const {loadMore, movies} = this.props;
-    if (movies.length > 9) {
-      loadMore();
-      this.setState(
-        (prevState, nextProps) => ({
-          page: prevState.page + 1,
-        }),
-        () => {
-          this.fetchAllMovies();
-        },
-      );
+    const {loadMore, moviesByGenre, route} = this.props;
+    const {genre} = route.params;
+    if (moviesByGenre.length > 9) {
+      if (genre === 'Top 100' && moviesByGenre.length === 100) {
+        console.log('Reach Top 100');
+      } else {
+        loadMore();
+        this.setState(
+          (prevState, nextProps) => ({
+            page: prevState.page + 1,
+          }),
+          () => {
+            this.fetchMoviesByGenre();
+          },
+        );
+      }
     }
   };
 
@@ -90,16 +79,9 @@ class Catalogue extends Component {
   };
 
   render() {
-    const {
-      allGenres,
-      movies,
-      loading,
-      activeSearch,
-      title,
-      navigation,
-      refreshing,
-      error,
-    } = this.props;
+    const {route, navigation, moviesByGenre, loading, error} = this.props;
+    const {genre} = route.params;
+
     return (
       <LinearGradient
         start={{x: 0.01, y: 0.01}}
@@ -113,15 +95,16 @@ class Catalogue extends Component {
           '#3462FF',
         ]}
         style={styles.app}>
-        {activeSearch ? <SearchHeader /> : <Header allGenres={allGenres} />}
-        {!loading && movies.length > 0 ? (
+        <NavigationHeader title={genre} navigation={navigation} />
+
+        {!loading && moviesByGenre.length > 0 ? (
           <FlatList
             contentContainerStyle={{
               width: '100%',
               backgroundColor: '#00000000',
             }}
             numColumns={3}
-            data={activeSearch && !title ? [] : movies}
+            data={moviesByGenre}
             renderItem={({item}) => (
               <View
                 style={{
@@ -133,14 +116,12 @@ class Catalogue extends Component {
             )}
             keyExtractor={() => Math.random()}
             ListFooterComponent={this._renderFooter}
-            onRefresh={this._handleRefresh}
-            refreshing={refreshing}
             onEndReached={this._handleLoadMore}
             onEndReachedThreshold={0.5}
             initialNumToRender={10}
           />
         ) : !error ? (
-          <View style={{backgroundColor: '#000000'}}>
+          <View style={{backgroundColor: '#000000', marginTop: 30}}>
             <ActivityIndicator />
           </View>
         ) : (
@@ -162,27 +143,20 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    movies: state.movies.movies,
-    loading: state.movies.loading,
-    loadingMore: state.movies.loadingMore,
-    refreshing: state.movies.refreshing,
-    activeSearch: state.movies.activeSearch,
-    title: state.movies.title,
-    sort: state.movies.sort,
-    genres: state.movies.genres,
-    error: state.movies.error,
-    allGenres: state.topGenre.genres,
+    moviesByGenre: state.genre.moviesByGenre,
+    loading: state.genre.loading,
+    loadingMore: state.genre.loadingMore,
+    error: state.genre.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getAllMovies: (page, title, sort, genres) =>
-      dispatch(moviesActions.fetchAllMovies(page, title, sort, genres)),
-    refresh: () => dispatch(moviesActions.refresh()),
-    loadMore: () => dispatch(moviesActions.loadMore()),
-    getGenres: () => dispatch(genreActions.fetchGenres()),
+    getMoviesByGenre: (genre, page) =>
+      dispatch(genreActions.fetchMoviesByGenre(genre, page)),
+    loadMore: () => dispatch(genreActions.loadMore()),
+    clearMovies: () => dispatch(genreActions.clearMovies()),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Catalogue);
+export default connect(mapStateToProps, mapDispatchToProps)(ShowAllGenreScreen);

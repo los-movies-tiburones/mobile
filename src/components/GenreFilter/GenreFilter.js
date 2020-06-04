@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
@@ -37,7 +37,8 @@ class GenreFilter extends Component {
 
   getGenres = () => {
     let {genres} = this.state;
-    return BurnedGenres.map((genre, i) => {
+    const {allGenres} = this.props;
+    return allGenres.map((genre, i) => {
       return (
         <View style={styles.genreContainer}>
           <Icon
@@ -58,10 +59,10 @@ class GenreFilter extends Component {
 
   render() {
     return (
-      <View
+      <ScrollView
         style={this.props.filterOn ? styles.genresView : styles.genreViewNone}>
         {this.getGenres()}
-      </View>
+      </ScrollView>
     );
   }
 }

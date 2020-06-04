@@ -2,13 +2,21 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Text, StyleSheet, Image, ImageBackground} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ImageBackground,
+  ScrollView,
+} from 'react-native';
 
 import {formatDate, formatDuration} from '../../utils/dates';
 
 //Components
 import RatingStars from '../RatingStars/RatingStars';
 import NavigationHeader from '../NavigationHeader/NavigationHeader';
+import RatingChart from '../RatingChart/RatingChart';
 
 //Actions
 import * as movieDetailActions from '../../store/actions/movieDetailActions';
@@ -24,14 +32,13 @@ class MovieScreen extends Component {
 
   render() {
     const {movieInstance, navigation} = this.props;
-
     return movieInstance ? (
       <ImageBackground
         source={{uri: movieInstance.cover}}
         style={styles.imageBack}
         blurRadius={0.1}>
         <NavigationHeader title={movieInstance.title} navigation={navigation} />
-        <View style={styles.movieDetailView}>
+        <ScrollView style={styles.movieDetailView}>
           <View style={styles.moviePrincipalInfo}>
             <Image
               style={styles.image}
@@ -82,10 +89,15 @@ class MovieScreen extends Component {
           <View style={styles.movieRating}>
             <RatingStars rating={movieInstance.averageRating} />
           </View>
-        </View>
+          <View style={styles.movieRating}>
+            <RatingChart ratings={movieInstance.ratings} />
+          </View>
+        </ScrollView>
       </ImageBackground>
     ) : (
-      <Text style={styles.movieTitle}>{'Movie not found'}</Text>
+      <View style={styles.movieDetailView}>
+        <Text style={styles.movieTitle}>{'Movie not found'}</Text>
+      </View>
     );
   }
 }

@@ -9,7 +9,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 // presentational components
 import Catalogue from './src/components/Catalogue/Catalogue';
 import MovieScreen from './src/components/MovieScreen/MovieScreen';
-import Movie from './src/components/Movie/Movie';
+import GenreScreen from './src/components/GenreScreen/GenreScreen';
+import ShowAllGenreScreen from './src/components/ShowAllGenreScreen/ShowAllGenreScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,13 +21,18 @@ export default class App extends Component {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen
-              name="Catalogue"
-              component={Catalogue}
+              name="GenreScreen"
+              component={GenreScreen}
               options={{headerShown: false}}
             />
             <Stack.Screen
-              name="MovieItem"
-              component={Movie}
+              name="ShowAll"
+              component={ShowAllGenreScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Catalogue"
+              component={Catalogue}
               options={{headerShown: false}}
             />
             <Stack.Screen
