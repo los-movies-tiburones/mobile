@@ -9,6 +9,7 @@ import {
   stylesMedium,
   stylesLarge,
   stylesSearch,
+  stylesLargeTop,
 } from './movieStyles';
 
 const Movie = ({movie, navigation, size}) => {
@@ -19,6 +20,8 @@ const Movie = ({movie, navigation, size}) => {
       ? stylesLarge
       : size === 'Medium'
       ? stylesMedium
+      : size === 'LargeTop'
+      ? stylesLargeTop
       : stylesSearch;
   return (
     <TouchableOpacity

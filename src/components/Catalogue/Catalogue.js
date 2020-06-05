@@ -21,7 +21,6 @@ import NavigationBar from '../NavigationBar/NavigationBar';
 
 //actions
 import * as moviesActions from '../../store/actions/movieActions';
-import * as genreActions from '../../store/actions/genreActions';
 
 // screen height and width
 const {width, height} = Dimensions.get('window');
@@ -35,8 +34,7 @@ class Catalogue extends Component {
   };
 
   componentDidMount() {
-    const {getGenres, allGenres, route, changeSearchStatus} = this.props;
-    if (!allGenres.length) getGenres();
+    const {route, changeSearchStatus} = this.props;
     if (route)
       if (route.params) if (route.params.activeSearch) changeSearchStatus();
     this.fetchAllMovies();
@@ -62,8 +60,8 @@ class Catalogue extends Component {
   };
 
   _handleLoadMore = () => {
-    const {loadMore, movies} = this.props;
-    if (movies.length > 9) {
+    const {loadMore, movies, error} = this.props;
+    if (movies.length > 8 && !error) {
       loadMore();
       this.setState(
         (prevState, nextProps) => ({
@@ -77,7 +75,7 @@ class Catalogue extends Component {
   };
 
   _renderFooter = () => {
-    return this.props.loadingMore ? (
+    return this.props.loadingMore && !this.props.error ? (
       <View
         style={{
           position: 'relative',
@@ -104,59 +102,67 @@ class Catalogue extends Component {
       error,
     } = this.props;
     return (
-      <LinearGradient
-        start={{x: 0.01, y: 0.01}}
-        end={{x: 0, y: 1}}
-        colors={[
-          '#000000',
-          '#000000',
-          '#000000',
-          '#000000',
-          '#243676',
-          '#3462FF',
-        ]}
-        style={styles.app}>
-        {activeSearch ? <SearchHeader /> : <Header allGenres={allGenres} />}
-        {!loading && movies.length > 0 ? (
-          <FlatList
-            contentContainerStyle={{
-              width: '100%',
-              backgroundColor: '#00000000',
-            }}
-            numColumns={3}
-            data={activeSearch && !title ? [] : movies}
-            renderItem={({item}) => (
-              <View
-                style={{
-                  marginTop: 25,
-                  width: '33%',
-                }}>
-                <Movie
-                  movie={item}
-                  navigation={navigation}
-                  size={!activeSearch ? 'Large' : 'Search'}
-                />
+      <>
+        <LinearGradient
+          start={{x: 0.01, y: 0.01}}
+          end={{x: 0, y: 1}}
+          colors={[
+            '#000000',
+            '#000000',
+            '#000000',
+            '#000000',
+            '#243676',
+            '#3462FF',
+          ]}
+          style={styles.app}>
+          {activeSearch ? <SearchHeader /> : <Header allGenres={allGenres} />}
+          <View style={styles.list}>
+            {!loading && movies.length > 0 ? (
+              <FlatList
+                contentContainerStyle={{
+                  width: '100%',
+                  backgroundColor: '#00000000',
+                  paddingBottom: 200,
+                }}
+                numColumns={3}
+                data={activeSearch && !title ? [] : movies}
+                renderItem={({item}) => (
+                  <View
+                    style={{
+                      marginTop: 25,
+                      width: '33%',
+                    }}>
+                    <Movie
+                      movie={item}
+                      navigation={navigation}
+                      size={!activeSearch ? 'Large' : 'Search'}
+                    />
+                  </View>
+                )}
+                keyExtractor={() => Math.random()}
+                ListFooterComponent={this._renderFooter}
+                onRefresh={this._handleRefresh}
+                refreshing={refreshing}
+                onEndReached={this._handleLoadMore}
+                onEndReachedThreshold={0.5}
+                initialNumToRender={10}
+              />
+            ) : !error ? (
+              <View style={{backgroundColor: '#000000'}}>
+                <ActivityIndicator />
               </View>
+            ) : (
+              <Text style={{alignSelf: 'center', color: 'white'}}>
+                {!activeSearch
+                  ? 'Not movies found'
+                  : 'You can search by Titles'}
+              </Text>
             )}
-            keyExtractor={() => Math.random()}
-            ListFooterComponent={this._renderFooter}
-            onRefresh={this._handleRefresh}
-            refreshing={refreshing}
-            onEndReached={this._handleLoadMore}
-            onEndReachedThreshold={0.5}
-            initialNumToRender={10}
-          />
-        ) : !error ? (
-          <View style={{backgroundColor: '#000000'}}>
-            <ActivityIndicator />
           </View>
-        ) : (
-          <Text style={{alignSelf: 'center', color: 'white'}}>
-            Not movies found
-          </Text>
-        )}
-        <NavigationBar navigation={navigation} actualSection={'Library'} />
-      </LinearGradient>
+
+          <NavigationBar navigation={navigation} actualSection={'Library'} />
+        </LinearGradient>
+      </>
     );
   }
 }
@@ -164,6 +170,10 @@ class Catalogue extends Component {
 const styles = StyleSheet.create({
   app: {
     backgroundColor: '#000000',
+    height: '100%',
+    marginBottom: 500,
+  },
+  list: {
     height: '100%',
   },
 });
@@ -179,7 +189,6 @@ const mapStateToProps = (state) => {
     sort: state.movies.sort,
     genres: state.movies.genres,
     error: state.movies.error,
-    allGenres: state.topGenre.genres,
   };
 };
 
@@ -189,7 +198,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(moviesActions.fetchAllMovies(page, title, sort, genres)),
     refresh: () => dispatch(moviesActions.refresh()),
     loadMore: () => dispatch(moviesActions.loadMore()),
-    getGenres: () => dispatch(genreActions.fetchGenres()),
     changeSearchStatus: () => dispatch(moviesActions.changeSearchState()),
   };
 };

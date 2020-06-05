@@ -11,8 +11,6 @@ import {
 
 //Components
 import Movie from '../Movie/Movie';
-//Actions
-import * as genreActions from '../../store/actions/genreActions';
 
 class GenreSection extends Component {
   render() {
@@ -70,6 +68,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingRight: 30,
   },
   genreTitle: {
     fontSize: 14,
@@ -90,6 +90,8 @@ const styles = StyleSheet.create({
   },
   genreList: {
     marginTop: 16,
+    marginLeft: 5,
+    marginRight: 15,
   },
 });
 

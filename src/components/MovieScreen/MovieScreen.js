@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   movieInfo: {
-    maxWidth: '75%',
+    maxWidth: '100%',
     display: 'flex',
     flexDirection: 'row',
     marginTop: 15,

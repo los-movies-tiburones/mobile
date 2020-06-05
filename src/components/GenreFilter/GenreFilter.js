@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
@@ -11,41 +11,47 @@ import BurnedGenres from '../../utils/genres';
 
 class GenreFilter extends Component {
   state = {
-    genres: [],
+    selectedGenres: [],
     error: false,
   };
 
   onChangedGenreOption = (selectedItem) => {
     const {changeGenres, getAllMovies, sort} = this.props;
-    let {genres} = this.state;
-    if (genres.includes(BurnedGenres[selectedItem])) {
-      genres = genres.filter((genre) => genre !== BurnedGenres[selectedItem]);
-      changeGenres(genres);
-      getAllMovies(0, '', sort, genres);
+    let {selectedGenres} = this.state;
+    if (selectedGenres.includes(BurnedGenres[selectedItem])) {
+      selectedGenres = selectedGenres.filter(
+        (genre) => genre !== BurnedGenres[selectedItem],
+      );
+      changeGenres(selectedGenres);
+      getAllMovies(0, '', sort, selectedGenres);
     } else {
-      if (genres.length < 4) {
-        genres.push(BurnedGenres[selectedItem]);
-        this.setState({genres: genres, error: false});
-        changeGenres(genres);
-        getAllMovies(0, '', sort, genres);
+      if (selectedGenres.length < 4) {
+        selectedGenres.push(BurnedGenres[selectedItem]);
+        this.setState({selectedGenres: selectedGenres, error: false});
+        changeGenres(selectedGenres);
+        getAllMovies(0, '', sort, selectedGenres);
       } else {
         this.setState({error: true});
       }
     }
-    this.setState({genres: genres, error: false});
+    this.setState({selectedGenres: selectedGenres, error: false});
   };
 
   getGenres = () => {
-    let {genres} = this.state;
-    const {allGenres} = this.props;
-    return allGenres.map((genre, i) => {
+    let {selectedGenres} = this.state;
+    const {genres} = this.props;
+    return BurnedGenres.map((genre, i) => {
       return (
-        <View style={styles.genreContainer}>
+        <View style={styles.genreContainer} key={Math.random()}>
           <Icon
             style={styles.checkIcon}
             name="check"
             size={25}
-            color={genres.includes(genre) ? 'blue' : 'black'}
+            color={
+              selectedGenres.includes(genre) || genres.includes(genre)
+                ? 'blue'
+                : 'black'
+            }
           />
           <Text
             style={styles.genre}
@@ -59,10 +65,10 @@ class GenreFilter extends Component {
 
   render() {
     return (
-      <ScrollView
+      <View
         style={this.props.filterOn ? styles.genresView : styles.genreViewNone}>
         {this.getGenres()}
-      </ScrollView>
+      </View>
     );
   }
 }

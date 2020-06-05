@@ -103,6 +103,8 @@ class ShowAllGenreScreen extends Component {
             contentContainerStyle={{
               width: '100%',
               backgroundColor: '#00000000',
+              paddingLeft: 7,
+              paddingRight: 12,
             }}
             numColumns={3}
             data={moviesByGenre}
@@ -110,9 +112,9 @@ class ShowAllGenreScreen extends Component {
               <View
                 style={{
                   marginTop: 25,
-                  width: '33%',
+                  width: '34%',
                 }}>
-                <Movie movie={item} navigation={navigation} size={'Large'} />
+                <Movie movie={item} navigation={navigation} size={'LargeTop'} />
               </View>
             )}
             keyExtractor={() => Math.random()}

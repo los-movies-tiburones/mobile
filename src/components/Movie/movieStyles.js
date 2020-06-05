@@ -7,7 +7,7 @@ const stylesMedium = StyleSheet.create({
     width: 109,
     backgroundColor: '#00000000',
     borderColor: '#eee',
-    marginRight: 16,
+    marginLeft: 16,
     marginBottom: 20,
   },
   listItemView: {
@@ -52,7 +52,7 @@ const stylesSmall = StyleSheet.create({
     width: 87,
     backgroundColor: '#00000000',
     borderColor: '#eee',
-    marginRight: 16,
+    marginLeft: 16,
   },
   listItemView: {
     width: 87,
@@ -108,12 +108,12 @@ const stylesLarge = StyleSheet.create({
     borderRadius: 10,
   },
   movieTitle: {
-    fontSize: 16,
+    fontSize: 12,
     color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    lineHeight: 19,
+    lineHeight: 14,
     width: '100%',
     height: 15,
     marginTop: 10,
@@ -133,6 +133,51 @@ const stylesLarge = StyleSheet.create({
     marginLeft: 4,
   },
 });
+
+const stylesLargeTop = StyleSheet.create({
+  listItem: {
+    paddingLeft: 12,
+    paddingRight: 12,
+    height: 210,
+    backgroundColor: '#00000000',
+    borderColor: '#eee',
+  },
+  listItemView: {
+    width: 108,
+    height: 205,
+  },
+  image: {
+    width: 108,
+    height: 164,
+    borderRadius: 10,
+  },
+  movieTitle: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    lineHeight: 14,
+    width: '100%',
+    height: 15,
+    marginTop: 10,
+  },
+  movieRating: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  movieRatingNumber: {
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: '300',
+    fontSize: 14,
+    lineHeight: 14,
+    color: '#FFFFFF',
+    marginLeft: 4,
+  },
+});
+
 const stylesSearch = StyleSheet.create({
   listItem: {
     paddingLeft: 12,
@@ -161,4 +206,4 @@ const stylesSearch = StyleSheet.create({
   },
 });
 
-export {stylesSmall, stylesMedium, stylesLarge, stylesSearch};
+export {stylesSmall, stylesMedium, stylesLarge, stylesSearch, stylesLargeTop};
