@@ -2,24 +2,41 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
 //Components
 import LinearGradient from 'react-native-linear-gradient';
 import GenreSection from '../GenreSection/GenreSection';
+import NavigationBar from '../NavigationBar/NavigationBar';
 
 //Actions
 import * as genreActions from '../../store/actions/genreActions';
 
 class GenreScreen extends Component {
   componentDidMount() {
-    const {getGenres} = this.props;
-    getGenres();
+    const {getGenres, getTop100, genres, top100} = this.props;
+    if (!genres.length) getGenres();
+    if (!top100.length) getTop100();
   }
   render() {
-    const {genres, navigation} = this.props;
+    const {
+      genres,
+      navigation,
+      moviesByGenre,
+      getAllTopMoviesByGenre,
+      top100,
+    } = this.props;
+    if (genres.length && !moviesByGenre) {
+      getAllTopMoviesByGenre(genres);
+    }
     return (
       <LinearGradient
         start={{x: 0.01, y: 0.01}}
@@ -41,6 +58,9 @@ class GenreScreen extends Component {
               name="search"
               size={20}
               color="white"
+              onPress={() =>
+                navigation.navigate('Catalogue', {activeSearch: true})
+              }
             />
           </View>
 
@@ -48,15 +68,26 @@ class GenreScreen extends Component {
             genre={'Top 100'}
             navigation={navigation}
             allGenres={genres}
+            moviesByGenre={top100}
           />
-          {genres.map((genre) => (
-            <GenreSection
-              genre={genre}
-              navigation={navigation}
-              allGenres={genres}
+          {moviesByGenre ? (
+            genres.map((genre) => (
+              <GenreSection
+                genre={genre}
+                navigation={navigation}
+                allGenres={genres}
+                moviesByGenre={moviesByGenre[genre]}
+              />
+            ))
+          ) : (
+            <ActivityIndicator
+              animating
+              size="large"
+              style={{marginTop: 20, marginBottom: 30}}
             />
-          ))}
+          )}
         </ScrollView>
+        <NavigationBar navigation={navigation} actualSection={'Top'} />
       </LinearGradient>
     );
   }
@@ -100,12 +131,17 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     genres: state.topGenre.genres,
+    top100: state.topGenre.top100,
+    moviesByGenre: state.topGenre.moviesByGenre,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getGenres: () => dispatch(genreActions.fetchGenres()),
+    getTop100: () => dispatch(genreActions.fetchTop100()),
+    getAllTopMoviesByGenre: (allGenres) =>
+      dispatch(genreActions.fetchTopMoviesByGenre(allGenres)),
   };
 };
 

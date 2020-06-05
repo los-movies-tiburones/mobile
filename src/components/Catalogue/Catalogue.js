@@ -17,6 +17,7 @@ import {
 import Movie from '../Movie/Movie';
 import Header from '../Header/Header';
 import SearchHeader from '../SearchHeader/SearchHeader';
+import NavigationBar from '../NavigationBar/NavigationBar';
 
 //actions
 import * as moviesActions from '../../store/actions/movieActions';
@@ -34,8 +35,10 @@ class Catalogue extends Component {
   };
 
   componentDidMount() {
-    const {getGenres, allGenres} = this.props;
+    const {getGenres, allGenres, route, changeSearchStatus} = this.props;
     if (!allGenres.length) getGenres();
+    if (route)
+      if (route.params) if (route.params.activeSearch) changeSearchStatus();
     this.fetchAllMovies();
   }
 
@@ -128,7 +131,11 @@ class Catalogue extends Component {
                   marginTop: 25,
                   width: '33%',
                 }}>
-                <Movie movie={item} navigation={navigation} size={'Large'} />
+                <Movie
+                  movie={item}
+                  navigation={navigation}
+                  size={!activeSearch ? 'Large' : 'Search'}
+                />
               </View>
             )}
             keyExtractor={() => Math.random()}
@@ -148,6 +155,7 @@ class Catalogue extends Component {
             Not movies found
           </Text>
         )}
+        <NavigationBar navigation={navigation} actualSection={'Library'} />
       </LinearGradient>
     );
   }
@@ -182,6 +190,7 @@ const mapDispatchToProps = (dispatch) => {
     refresh: () => dispatch(moviesActions.refresh()),
     loadMore: () => dispatch(moviesActions.loadMore()),
     getGenres: () => dispatch(genreActions.fetchGenres()),
+    changeSearchStatus: () => dispatch(moviesActions.changeSearchState()),
   };
 };
 

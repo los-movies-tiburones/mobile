@@ -22,6 +22,7 @@ const NavigationHeader = ({title, navigation, principal}) => {
         name="search"
         size={22}
         color={'#FFFFFF'}
+        onPress={() => navigation.navigate('Catalogue', {activeSearch: true})}
       />
     </View>
   );

@@ -16,6 +16,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import NavigationHeader from '../NavigationHeader/NavigationHeader';
 import Movie from '../Movie/Movie';
+import NavigationBar from '../NavigationBar/NavigationBar';
 
 //Actions
 import * as genreActions from '../../store/actions/genreActions';
@@ -129,6 +130,7 @@ class ShowAllGenreScreen extends Component {
             Not movies found
           </Text>
         )}
+        <NavigationBar navigation={navigation} actualSection={'Top'} />
       </LinearGradient>
     );
   }

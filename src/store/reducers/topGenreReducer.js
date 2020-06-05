@@ -2,7 +2,7 @@
 import * as actionTypes from '../constants/movieConstants';
 
 const initialState = {
-  moviesByGenre: [],
+  moviesByGenre: null,
   genres: [],
   top100: [],
   error: false,
@@ -13,10 +13,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.SET_TOP_MOVIES_BY_GENRE:
       return {
         ...state,
-        moviesByGenre: [
-          ...state.moviesByGenre,
-          {genre: action.genre, movies: action.movies},
-        ],
+        moviesByGenre: action.movies,
       };
     case actionTypes.FETCH_TOP_MOVIES_BY_GENRE_FAILED:
       return {

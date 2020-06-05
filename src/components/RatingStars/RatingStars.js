@@ -59,6 +59,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     lineHeight: 14,
+    marginTop: 5,
+    marginLeft: 4,
   },
 });
 

@@ -16,18 +16,17 @@ import {
   SET_TOP_100,
 } from '../constants/movieConstants';
 
-export const setTopMoviesByGenre = (movies, genre) => {
+export const setTopMoviesByGenre = (movies) => {
   return {
     type: SET_TOP_MOVIES_BY_GENRE,
     movies: movies,
-    genre: genre,
   };
 };
 
-export const fetchTopMoviesByGenre = (genre) => {
+export const fetchTopMoviesByGenre = (allGenres) => {
   return {
     type: FETCH_TOP_MOVIES_BY_GENRE,
-    genre: genre,
+    allGenres: allGenres,
   };
 };
 

@@ -20,9 +20,10 @@ import {backendRequest} from '../../utils/axiosService';
 
 const fetchTopMoviesByGenreSaga = function* fetchTopMoviesByGenreSaga(action) {
   try {
-    const filter = action.genre !== 'Top 100' ? `?genre=${action.genre}` : '';
-    const response = yield backendRequest().get(`/movies/top-rating${filter}`);
-    yield put(setTopMoviesByGenre(response.data, action.genre));
+    const response = yield backendRequest().get(
+      `/movies/top-rating?genres=${action.allGenres.join(',')}`,
+    );
+    yield put(setTopMoviesByGenre(response.data));
   } catch (error) {
     yield put(fetchTopMoviesByGenreFailed());
   }

@@ -36,7 +36,7 @@ class MovieScreen extends Component {
       <ImageBackground
         source={{uri: movieInstance.cover}}
         style={styles.imageBack}
-        blurRadius={0.1}>
+        blurRadius={0.7}>
         <NavigationHeader title={movieInstance.title} navigation={navigation} />
         <ScrollView style={styles.movieDetailView}>
           <View style={styles.moviePrincipalInfo}>
@@ -46,7 +46,7 @@ class MovieScreen extends Component {
             />
             <View style={styles.movieDescriptionView}>
               <Text style={styles.movieDate}>
-                {formatDate(movieInstance.year).split(',')[1]}
+                {formatDate(movieInstance.year).split(', ')[1]}
               </Text>
               <Text style={styles.movieTitle}>{movieInstance.title}</Text>
               <Text style={styles.movieCategories}>
@@ -116,14 +116,14 @@ const styles = StyleSheet.create({
   },
   movieDescriptionView: {
     width: '60%',
-    height: 169,
+    height: 211,
     marginLeft: 20,
     justifyContent: 'flex-end',
     paddingBottom: 20,
   },
   image: {
-    width: 112,
-    height: 169,
+    width: 140,
+    height: 211,
     borderRadius: 10,
   },
   movieTitle: {
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   movieInfo: {
-    width: '75%',
+    maxWidth: '75%',
     display: 'flex',
     flexDirection: 'row',
     marginTop: 15,
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   movieDuration: {
     fontSize: 11,
-    color: '#848484',
+    color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 'normal',

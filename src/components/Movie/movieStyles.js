@@ -133,5 +133,32 @@ const stylesLarge = StyleSheet.create({
     marginLeft: 4,
   },
 });
+const stylesSearch = StyleSheet.create({
+  listItem: {
+    paddingLeft: 12,
+    paddingRight: 12,
+    height: 174,
+    backgroundColor: '#00000000',
+    borderColor: '#eee',
+  },
+  listItemView: {
+    width: 114,
+    height: 174,
+  },
+  image: {
+    width: 114,
+    height: 174,
+    borderRadius: 10,
+  },
+  movieTitle: {
+    display: 'none',
+  },
+  movieRating: {
+    display: 'none',
+  },
+  movieRatingNumber: {
+    display: 'none',
+  },
+});
 
-export {stylesSmall, stylesMedium, stylesLarge};
+export {stylesSmall, stylesMedium, stylesLarge, stylesSearch};

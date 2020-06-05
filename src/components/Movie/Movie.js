@@ -4,7 +4,12 @@ import React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
-import {stylesSmall, stylesMedium, stylesLarge} from './movieStyles';
+import {
+  stylesSmall,
+  stylesMedium,
+  stylesLarge,
+  stylesSearch,
+} from './movieStyles';
 
 const Movie = ({movie, navigation, size}) => {
   const styles =
@@ -12,7 +17,9 @@ const Movie = ({movie, navigation, size}) => {
       ? stylesSmall
       : size === 'Large'
       ? stylesLarge
-      : stylesMedium;
+      : size === 'Medium'
+      ? stylesMedium
+      : stylesSearch;
   return (
     <TouchableOpacity
       style={styles.listItem}

@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 
 import {
   View,
@@ -16,20 +15,8 @@ import Movie from '../Movie/Movie';
 import * as genreActions from '../../store/actions/genreActions';
 
 class GenreSection extends Component {
-  componentDidMount() {
-    const {getTopMoviesByGenre, genre, moviesByGenre} = this.props;
-    const genreMovies = moviesByGenre.find(
-      (moviesObject) => moviesObject.genre === genre,
-    );
-    if (!genreMovies) getTopMoviesByGenre(genre);
-  }
-
   render() {
     const {genre, moviesByGenre, navigation, allGenres} = this.props;
-
-    const genreMovies = moviesByGenre.find(
-      (moviesObject) => moviesObject.genre === genre,
-    );
 
     return (
       <View style={styles.genreSectionView}>
@@ -47,10 +34,10 @@ class GenreSection extends Component {
             Show All
           </Text>
         </View>
-        {genreMovies && genreMovies.movies.length > 0 ? (
+        {moviesByGenre && moviesByGenre.length > 0 ? (
           <View style={styles.genreList}>
             <FlatList
-              data={genreMovies ? genreMovies.movies : null}
+              data={moviesByGenre ? moviesByGenre : null}
               horizontal={true}
               renderItem={({item}) => (
                 <View key={Math.random()}>
@@ -77,7 +64,7 @@ class GenreSection extends Component {
 
 const styles = StyleSheet.create({
   genreSectionView: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
   genreHeader: {
     display: 'flex',
@@ -102,22 +89,8 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   genreList: {
-    marginTop: 20,
+    marginTop: 16,
   },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    moviesByGenre: state.topGenre.moviesByGenre,
-    top100: state.topGenre.top100,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getTopMoviesByGenre: (genre) =>
-      dispatch(genreActions.fetchTopMoviesByGenre(genre)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(GenreSection);
+export default GenreSection;
