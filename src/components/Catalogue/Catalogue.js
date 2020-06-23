@@ -22,6 +22,8 @@ import NavigationBar from '../NavigationBar/NavigationBar';
 //actions
 import * as moviesActions from '../../store/actions/movieActions';
 
+import {stylesLarge, stylesSearch} from '../Movie/movieStyles';
+
 // screen height and width
 const {width, height} = Dimensions.get('window');
 
@@ -135,7 +137,7 @@ class Catalogue extends Component {
                     <Movie
                       movie={item}
                       navigation={navigation}
-                      size={!activeSearch ? 'Large' : 'Search'}
+                      styles={!activeSearch ? stylesLarge : stylesSearch}
                     />
                   </View>
                 )}

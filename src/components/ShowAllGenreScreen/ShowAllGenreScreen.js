@@ -20,6 +20,7 @@ import NavigationBar from '../NavigationBar/NavigationBar';
 
 //Actions
 import * as genreActions from '../../store/actions/genreActions';
+import {stylesLargeTop} from '../Movie/movieStyles';
 
 const {width, height} = Dimensions.get('window');
 
@@ -114,7 +115,11 @@ class ShowAllGenreScreen extends Component {
                   marginTop: 25,
                   width: '34%',
                 }}>
-                <Movie movie={item} navigation={navigation} size={'LargeTop'} />
+                <Movie
+                  movie={item}
+                  navigation={navigation}
+                  styles={stylesLargeTop}
+                />
               </View>
             )}
             keyExtractor={() => Math.random()}

@@ -30,25 +30,20 @@ const stylesMedium = StyleSheet.create({
     height: 15,
     marginTop: 10,
   },
-  movieRating: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: 5,
-  },
-  movieRatingNumber: {
+  movieYear: {
+    fontSize: 12,
+    color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
-    fontWeight: '300',
-    fontSize: 12,
+    fontWeight: 'normal',
     lineHeight: 14,
-    color: '#FFFFFF',
-    marginLeft: 4,
+    marginTop: 5,
   },
 });
 
 const stylesSmall = StyleSheet.create({
   listItem: {
-    height: 220,
+    height: 185,
     width: 87,
     backgroundColor: '#00000000',
     borderColor: '#eee',
@@ -56,7 +51,7 @@ const stylesSmall = StyleSheet.create({
   },
   listItemView: {
     width: 87,
-    height: 215,
+    height: 180,
   },
   image: {
     width: 87,
@@ -74,19 +69,14 @@ const stylesSmall = StyleSheet.create({
     height: 15,
     marginTop: 10,
   },
-  movieRating: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  movieRatingNumber: {
+  movieYear: {
+    fontSize: 12,
+    color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
-    fontWeight: '300',
-    fontSize: 12,
+    fontWeight: 'normal',
     lineHeight: 14,
-    color: '#FFFFFF',
-    marginLeft: 4,
+    marginTop: 5,
   },
 });
 
@@ -118,19 +108,14 @@ const stylesLarge = StyleSheet.create({
     height: 15,
     marginTop: 10,
   },
-  movieRating: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  movieRatingNumber: {
+  movieYear: {
+    fontSize: 12,
+    color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
-    fontWeight: '300',
-    fontSize: 14,
+    fontWeight: 'normal',
     lineHeight: 14,
-    color: '#FFFFFF',
-    marginLeft: 4,
+    marginTop: 5,
   },
 });
 
@@ -138,13 +123,13 @@ const stylesLargeTop = StyleSheet.create({
   listItem: {
     paddingLeft: 12,
     paddingRight: 12,
-    height: 210,
+    height: 200,
     backgroundColor: '#00000000',
     borderColor: '#eee',
   },
   listItemView: {
     width: 108,
-    height: 205,
+    height: 184,
   },
   image: {
     width: 108,
@@ -162,19 +147,14 @@ const stylesLargeTop = StyleSheet.create({
     height: 15,
     marginTop: 10,
   },
-  movieRating: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  movieRatingNumber: {
+  movieYear: {
+    fontSize: 12,
+    color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
-    fontWeight: '300',
-    fontSize: 14,
+    fontWeight: 'normal',
     lineHeight: 14,
-    color: '#FFFFFF',
-    marginLeft: 4,
+    marginTop: 5,
   },
 });
 
@@ -198,12 +178,110 @@ const stylesSearch = StyleSheet.create({
   movieTitle: {
     display: 'none',
   },
-  movieRating: {
-    display: 'none',
+});
+
+const stylesGiant = StyleSheet.create({
+  listItem: {
+    marginLeft: 12,
+    marginRight: 12,
+    height: 305,
+    backgroundColor: '#00000000',
+    borderColor: '#eee',
+    marginBottom: 40,
   },
-  movieRatingNumber: {
+  listItemView: {
+    width: 201,
+    height: 304,
+  },
+  image: {
+    width: 201,
+    height: 304,
+    borderRadius: 10,
+  },
+  movieTitle: {
     display: 'none',
   },
 });
 
-export {stylesSmall, stylesMedium, stylesLarge, stylesSearch, stylesLargeTop};
+const stylesSmallTop100 = StyleSheet.create({
+  listItem: {
+    height: 185,
+    width: 87,
+    backgroundColor: '#00000000',
+    borderColor: '#eee',
+    marginLeft: 16,
+  },
+  listItemView: {
+    width: 87,
+    height: 180,
+  },
+  image: {
+    width: 87,
+    height: 132,
+    borderRadius: 10,
+  },
+  movieTitle: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    lineHeight: 14,
+    width: '100%',
+    height: 15,
+    marginTop: 10,
+  },
+  movieYear: {
+    display: 'none',
+  },
+});
+const stylesHorizontalMovieDetail = StyleSheet.create({
+  listItem: {
+    height: 170,
+    width: 190,
+    backgroundColor: '#00000000',
+    borderColor: '#eee',
+    marginLeft: 16,
+  },
+  listItemView: {
+    width: 190,
+    height: 170,
+  },
+  image: {
+    width: 190,
+    height: 111,
+    borderRadius: 10,
+    resizeMode: 'stretch',
+  },
+  movieTitle: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    lineHeight: 14,
+    width: '100%',
+    height: 15,
+    marginTop: 10,
+  },
+  movieYear: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    lineHeight: 14,
+    marginTop: 5,
+  },
+});
+
+export {
+  stylesSmall,
+  stylesMedium,
+  stylesLarge,
+  stylesSearch,
+  stylesLargeTop,
+  stylesGiant,
+  stylesSmallTop100,
+  stylesHorizontalMovieDetail,
+};

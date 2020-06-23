@@ -2,27 +2,11 @@
 import React from 'react';
 
 import {View, Text, TouchableOpacity, Image} from 'react-native';
-import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
-import {
-  stylesSmall,
-  stylesMedium,
-  stylesLarge,
-  stylesSearch,
-  stylesLargeTop,
-} from './movieStyles';
+//Utils
+import {formatDate} from '../../utils/dates';
 
-const Movie = ({movie, navigation, size}) => {
-  const styles =
-    size === 'Small'
-      ? stylesSmall
-      : size === 'Large'
-      ? stylesLarge
-      : size === 'Medium'
-      ? stylesMedium
-      : size === 'LargeTop'
-      ? stylesLargeTop
-      : stylesSearch;
+const Movie = ({movie, navigation, styles}) => {
   return (
     <TouchableOpacity
       style={styles.listItem}
@@ -33,16 +17,9 @@ const Movie = ({movie, navigation, size}) => {
           source={movie.cover ? {uri: movie.cover} : null}
         />
         <Text style={styles.movieTitle}>{movie.title}</Text>
-        <View style={styles.movieRating}>
-          <Icon
-            style={styles.movieRatingIcon}
-            name="star"
-            size={12}
-            color="#FFC107"
-            onPress={() => this.props.changeSearchStatus()}
-          />
-          <Text style={styles.movieRatingNumber}>{movie.averageRating}</Text>
-        </View>
+        <Text style={styles.movieYear}>
+          {formatDate(movie.year).split(', ')[1]}
+        </Text>
       </View>
     </TouchableOpacity>
   );

@@ -11,6 +11,9 @@ import Catalogue from './src/components/Catalogue/Catalogue';
 import MovieScreen from './src/components/MovieScreen/MovieScreen';
 import GenreScreen from './src/components/GenreScreen/GenreScreen';
 import ShowAllGenreScreen from './src/components/ShowAllGenreScreen/ShowAllGenreScreen';
+import LoginScreen from './src/components/LoginScreen/LoginScreen';
+import SignUpScreen from './src/components/SignUpScreen/SignUpScreen';
+import LandingScreen from './src/components/LandingScreen/LandingScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +23,21 @@ export default class App extends Component {
       <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator>
+            <Stack.Screen
+              name="LandingScreen"
+              component={LandingScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="SignUpScreen"
+              component={SignUpScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="LoginScreen"
+              component={LoginScreen}
+              options={{headerShown: false}}
+            />
             <Stack.Screen
               name="GenreScreen"
               component={GenreScreen}

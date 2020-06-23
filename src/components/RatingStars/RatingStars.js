@@ -31,7 +31,6 @@ const RatingStars = ({rating}) => {
         {getStars()}
         <Text style={styles.ratingText}>{rating}</Text>
       </View>
-      <Text style={styles.ratingDefaultText}>Average Rating</Text>
     </>
   );
 };
@@ -42,15 +41,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    height: 50,
   },
   ratingText: {
-    fontSize: 25,
+    fontSize: 18,
     color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 'normal',
-    lineHeight: 29,
+    lineHeight: 21,
   },
   ratingDefaultText: {
     fontSize: 12,

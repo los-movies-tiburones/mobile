@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   chartItem: {
-    height: 200,
+    height: 120,
     width: 25,
     backgroundColor: '#00000000',
     alignItems: 'center',

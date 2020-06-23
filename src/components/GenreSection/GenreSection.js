@@ -14,47 +14,50 @@ import Movie from '../Movie/Movie';
 
 class GenreSection extends Component {
   render() {
-    const {genre, moviesByGenre, navigation, allGenres} = this.props;
+    const {
+      genre,
+      moviesByGenre,
+      navigation,
+      movieStyle,
+      title,
+      showButton,
+      genreTitleStyle,
+    } = this.props;
 
     return (
       <View style={styles.genreSectionView}>
         <View style={styles.genreHeader}>
-          {allGenres.includes(genre) ? (
-            <Text style={styles.genreTitle}>Top movies in {genre}</Text>
-          ) : (
-            <Text style={{...styles.genreTitle, fontWeight: '500'}}>
-              Top 100
-            </Text>
-          )}
+          <Text style={genreTitleStyle ? genreTitleStyle : styles.genreTitle}>
+            {title}
+          </Text>
           <Text
-            style={styles.showAllBtn}
+            style={showButton ? styles.showAllBtn : {display: 'none'}}
             onPress={() => navigation.navigate('ShowAll', {genre: genre})}>
             Show All
           </Text>
         </View>
-        {moviesByGenre && moviesByGenre.length > 0 ? (
-          <View style={styles.genreList}>
-            <FlatList
-              data={moviesByGenre ? moviesByGenre : null}
-              horizontal={true}
-              renderItem={({item}) => (
-                <View key={Math.random()}>
-                  <Movie
-                    movie={item}
-                    navigation={navigation}
-                    size={allGenres.includes(genre) ? 'Small' : 'Medium'}
-                  />
-                </View>
-              )}
-            />
-          </View>
-        ) : (
-          <ActivityIndicator
-            animating
-            size="large"
-            style={{marginTop: 20, marginBottom: 30}}
+        <View style={styles.genreList}>
+          <FlatList
+            data={moviesByGenre ? moviesByGenre : null}
+            horizontal={true}
+            renderItem={({item}) => (
+              <View key={Math.random()}>
+                <Movie
+                  movie={item}
+                  navigation={navigation}
+                  styles={movieStyle}
+                />
+              </View>
+            )}
+            ListEmptyComponent={() => (
+              <ActivityIndicator
+                animating
+                size="large"
+                style={styles.activityIndicator}
+              />
+            )}
           />
-        )}
+        </View>
       </View>
     );
   }
@@ -69,15 +72,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingLeft: 20,
-    paddingRight: 30,
+    paddingRight: 35,
   },
   genreTitle: {
-    fontSize: 14,
+    fontSize: 20,
     color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
-    fontWeight: 'normal',
-    lineHeight: 16,
+    fontWeight: '500',
+    lineHeight: 23,
     backgroundColor: '#00000000',
   },
   showAllBtn: {
@@ -92,6 +95,12 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginLeft: 5,
     marginRight: 15,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  activityIndicator: {
+    marginTop: 20,
+    marginBottom: 30,
   },
 });
 

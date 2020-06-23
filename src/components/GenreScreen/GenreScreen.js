@@ -20,6 +20,12 @@ import NavigationBar from '../NavigationBar/NavigationBar';
 //Actions
 import * as genreActions from '../../store/actions/genreActions';
 
+import {
+  stylesSmall,
+  stylesGiant,
+  stylesSmallTop100,
+} from '../Movie/movieStyles';
+
 class GenreScreen extends Component {
   componentDidMount() {
     const {getGenres, getTop100, genres, top100} = this.props;
@@ -53,7 +59,7 @@ class GenreScreen extends Component {
           style={styles.app}>
           <ScrollView style={styles.genresScreenView}>
             <View style={styles.appTitleView}>
-              <Text style={styles.appTitle}>Movie Sharkers</Text>
+              <Text style={styles.appTitle}>Moviesharkers</Text>
               <Icon
                 style={styles.searchIcon}
                 name="search"
@@ -66,10 +72,21 @@ class GenreScreen extends Component {
             </View>
 
             <GenreSection
+              genre={'Recommendations'}
+              navigation={navigation}
+              allGenres={genres}
+              moviesByGenre={top100}
+              movieStyle={stylesGiant}
+              title={'Recommendations'}
+            />
+            <GenreSection
               genre={'Top 100'}
               navigation={navigation}
               allGenres={genres}
               moviesByGenre={top100}
+              movieStyle={stylesSmallTop100}
+              title={'Top 100'}
+              showButton
             />
             {moviesByGenre ? (
               genres.map((genre) => (
@@ -78,6 +95,9 @@ class GenreScreen extends Component {
                   navigation={navigation}
                   allGenres={genres}
                   moviesByGenre={moviesByGenre[genre]}
+                  movieStyle={stylesSmall}
+                  title={`Top movies in ${genre}`}
+                  showButton
                 />
               ))
             ) : (
@@ -114,12 +134,12 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   appTitle: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#FFFFFF',
-    fontFamily: 'Roboto',
+    fontFamily: 'Futura',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    lineHeight: 23,
+    lineHeight: 24,
     backgroundColor: '#00000000',
   },
   searchIcon: {
