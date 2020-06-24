@@ -8,13 +8,15 @@ import {
 } from '../actions/registrationActions';
 import {LOG_IN, REGISTER_USER} from '../constants/registrationConstants';
 import {backendRequest} from '../../utils/axiosService';
+import {storeUsername} from '../../utils/asyncStorage';
 
 const logInSaga = function* logInSaga(action) {
   try {
     console.log('\n\n\n\n\n', action.credentials);
     // const response = yield backendRequest().get('/login');
-    //yield put(logInSuccess(action.credentials.username));
-    action.navigation.navigate('GenreScreen');
+    yield put(logInSuccess(action.credentials.username));
+    // action.navigation.navigate('GenreScreen');
+    yield storeUsername(action.credentials.username);
   } catch (error) {
     yield put(logInFailed());
   }
@@ -22,9 +24,10 @@ const logInSaga = function* logInSaga(action) {
 const signUpSaga = function* signUpSaga(action) {
   try {
     console.log('\n\n\n\n\n', action.user);
-    // const response = yield backendRequest().get('/login');
-    //yield put(registrationSuccess(action.user));
-    action.navigation.navigate('GenreScreen');
+    // const response = yield backendRequest().get('/signUp');
+    yield put(registrationSuccess(action.user));
+    yield storeUsername(action.user.username);
+    // action.navigation.navigate('GenreScreen');
   } catch (error) {
     yield put(registrationFailed());
   }

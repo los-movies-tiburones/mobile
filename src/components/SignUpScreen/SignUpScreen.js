@@ -34,8 +34,9 @@ class SignUpScreen extends Component {
     const {signUp, navigation} = this.props;
     const {username, password, passwordConfirmation} = this.state;
 
-    if (password && password === passwordConfirmation) {
+    if (username && password && password === passwordConfirmation) {
       //navigation.navigate('GenreScreen');
+      this.setState({notMatchingPasswordError: false});
       signUp(this.state, navigation);
     } else {
       this.setState({notMatchingPasswordError: true});
@@ -48,9 +49,7 @@ class SignUpScreen extends Component {
   }
 
   render() {
-    const {user, navigation, loading} = this.props;
-    console.log(user);
-
+    const {username, navigation, loading} = this.props;
     return (
       <LinearGradient
         start={{x: 0.01, y: 0.01}}
@@ -228,7 +227,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    user: state.registration.user,
+    username: state.registration.username,
     loading: state.registration.loading,
   };
 };

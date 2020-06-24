@@ -40,6 +40,7 @@ class LoginScreen extends Component {
 
   render() {
     const {username, navigation, loading} = this.props;
+
     return (
       <LinearGradient
         start={{x: 0.01, y: 0.01}}
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    username: state.registration.userName,
+    username: state.registration.username,
     loading: state.registration.loading,
   };
 };

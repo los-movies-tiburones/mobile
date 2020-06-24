@@ -44,7 +44,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemView: {
+    width: '50%',
+    height: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   itemIcon: {
     marginBottom: 5,

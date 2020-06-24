@@ -2,8 +2,7 @@
 import * as actionTypes from '../constants/registrationConstants';
 
 const initialState = {
-  userName: '',
-  user: {},
+  username: '',
   loading: false,
   error: false,
 };
@@ -13,7 +12,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.USER_AUTHORIZED:
       return {
         ...state,
-        userName: action.username,
+        username: action.username,
         loading: false,
       };
     case actionTypes.USER_NOT_AUTHORIZED:
@@ -37,7 +36,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.REGISTRATION_SUCCESS:
       return {
         ...state,
-        user: action.user,
+        username: action.user.username,
         loading: false,
       };
     case actionTypes.REGISTRATION_FAILED:

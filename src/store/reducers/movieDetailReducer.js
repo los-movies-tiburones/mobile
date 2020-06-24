@@ -18,6 +18,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         error: true,
       };
+    case actionTypes.RATE_MOVIE_FAILED:
+      return {
+        ...state,
+        error: true,
+      };
     default:
       return state;
   }

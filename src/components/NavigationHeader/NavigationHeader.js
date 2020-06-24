@@ -1,29 +1,25 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
 const NavigationHeader = ({title, navigation, principal}) => {
   return (
     <View style={styles.headerView}>
       {!principal ? (
-        <Icon
+        <TouchableOpacity
           style={styles.movieRatingIcon}
-          name="arrow-back"
-          size={22}
-          color={'#FFFFFF'}
-          onPress={() => navigation.goBack()}
-        />
+          onPress={() => navigation.goBack()}>
+          <Icon name="arrow-back" size={22} color={'#FFFFFF'} />
+        </TouchableOpacity>
       ) : null}
       <Text style={styles.title}>{title}</Text>
-      <Icon
+      <TouchableOpacity
         style={styles.movieRatingIcon}
-        name="search"
-        size={22}
-        color={'#FFFFFF'}
-        onPress={() => navigation.navigate('Catalogue', {activeSearch: true})}
-      />
+        onPress={() => navigation.navigate('Catalogue', {activeSearch: true})}>
+        <Icon name="search" size={22} color={'#FFFFFF'} />
+      </TouchableOpacity>
     </View>
   );
 };

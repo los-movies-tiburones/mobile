@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
 class RateInput extends Component {
   state = {
-    actualRating: 0,
+    actualRating: this.props.startRating,
   };
 
   getStars = () => {

@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import GenreFilter from '../GenreFilter/GenreFilter';
 import SortFilter from '../SortFilter/SortFilter';
 import SortOptions from '../../utils/sortOptions';
@@ -38,14 +38,12 @@ class Header extends Component {
     return (
       <View>
         <View style={styles.appTitleView}>
-          <Text style={styles.appTitle}>Movie Sharkers</Text>
-          <Icon
+          <Text style={styles.appTitle}>MovieSharkers</Text>
+          <TouchableOpacity
             style={styles.searchIcon}
-            name="search"
-            size={20}
-            color="white"
-            onPress={() => this.props.changeSearchStatus()}
-          />
+            onPress={() => this.props.changeSearchStatus()}>
+            <Icon name="search" size={20} color="white" />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.firstLabel}>
@@ -105,18 +103,18 @@ const styles = StyleSheet.create({
     marginTop: 33,
   },
   appTitle: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    lineHeight: 23,
+    lineHeight: 24,
     backgroundColor: '#00000000',
   },
   searchIcon: {
     position: 'absolute',
     right: 0,
-    marginRight: 20,
+    marginRight: 43,
   },
   firstLabel: {
     flex: 1,

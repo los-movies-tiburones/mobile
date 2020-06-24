@@ -7,6 +7,7 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 
 //Components
@@ -30,11 +31,12 @@ class GenreSection extends Component {
           <Text style={genreTitleStyle ? genreTitleStyle : styles.genreTitle}>
             {title}
           </Text>
-          <Text
-            style={showButton ? styles.showAllBtn : {display: 'none'}}
+          <TouchableOpacity
             onPress={() => navigation.navigate('ShowAll', {genre: genre})}>
-            Show All
-          </Text>
+            <Text style={showButton ? styles.showAllBtn : {display: 'none'}}>
+              Show All
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.genreList}>
           <FlatList

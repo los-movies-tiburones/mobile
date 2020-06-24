@@ -9,12 +9,15 @@ import {
   fetchMoviesByGenreFailed,
   fetchTop100Failed,
   setTop100,
+  setRecommendedMovies,
+  fetchRecommendedMoviesFailed,
 } from '../actions/genreActions';
 import {
   FETCH_TOP_MOVIES_BY_GENRE,
   FETCH_GENRES,
   FETCH_MOVIES_BY_GENRE,
   FETCH_TOP_100,
+  FETCH_RECOMMENDED_MOVIES,
 } from '../constants/movieConstants';
 import {backendRequest} from '../../utils/axiosService';
 
@@ -70,9 +73,22 @@ const fetchGenresSaga = function* fetchGenresSaga(action) {
   }
 };
 
+const fetchRecommendedMoviesSaga = function* fetchRecommendedMoviesSaga(
+  action,
+) {
+  try {
+    console.log(action.username);
+    //const response = yield backendRequest().get('/movies/genres');
+    //yield put(setRecommendedMovies(response.data));
+  } catch (error) {
+    yield put(fetchRecommendedMoviesFailed());
+  }
+};
+
 export function* GenreSaga() {
   yield takeEvery(FETCH_TOP_MOVIES_BY_GENRE, fetchTopMoviesByGenreSaga);
   yield takeEvery(FETCH_MOVIES_BY_GENRE, fetchMoviesByGenreSaga);
   yield takeEvery(FETCH_GENRES, fetchGenresSaga);
   yield takeEvery(FETCH_TOP_100, fetchTopMovies);
+  yield takeEvery(FETCH_RECOMMENDED_MOVIES, fetchRecommendedMoviesSaga);
 }

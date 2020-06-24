@@ -6,7 +6,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   ImageBackground,
   ScrollView,
   TouchableOpacity,
@@ -28,9 +27,12 @@ import {stylesHorizontalMovieDetail} from '../Movie/movieStyles';
 import * as movieDetailActions from '../../store/actions/movieDetailActions';
 import * as genreActions from '../../store/actions/genreActions';
 
+//Utils
+import {checkUsername} from '../../utils/asyncStorage';
+
 class MovieScreen extends Component {
   state = {
-    hasRated: false,
+    previousRating: 0,
     showRatingInput: false,
   };
   componentDidMount() {
@@ -42,20 +44,21 @@ class MovieScreen extends Component {
   formatBudget = (budget) =>
     budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-  doneRateAction = (rating) => {
-    console.log(rating);
-    this.setState({showRatingInput: false, hasRated: true});
+  doneRateAction = async (rating) => {
+    const {rateMovie} = this.props;
+    const username = await checkUsername();
+    rateMovie(rating, username);
+    this.setState({showRatingInput: false, previousRating: rating});
   };
 
   render() {
     const {movieInstance, navigation, top100} = this.props;
-    const {showRatingInput, hasRated} = this.state;
+    const {showRatingInput, previousRating} = this.state;
 
     return movieInstance ? (
       <ImageBackground
         source={{uri: movieInstance.cover}}
-        style={styles.imageBack}
-        blurRadius={0.7}>
+        style={styles.imageBack}>
         <ScrollView style={styles.movieDetailView}>
           <TouchableOpacity style={styles.backIcon}>
             <Icon
@@ -66,19 +69,15 @@ class MovieScreen extends Component {
             />
           </TouchableOpacity>
           <View style={styles.moviePrincipalInfo}>
-            <Image
-              style={styles.image}
-              source={movieInstance.cover ? {uri: movieInstance.cover} : null}
-            />
             <View style={styles.movieDescriptionView}>
               <Text style={styles.movieDate}>
                 {formatDate(movieInstance.year).split(', ')[1]}
               </Text>
-              <Text style={styles.movieTitle}>{movieInstance.title}</Text>
               <Text style={styles.movieCategories}>
                 {movieInstance.genres.join(', ')}
               </Text>
             </View>
+            <Text style={styles.movieTitle}>{movieInstance.title}</Text>
           </View>
           <View style={styles.movieInfo}>
             <Text style={styles.movieDuration}>
@@ -125,7 +124,7 @@ class MovieScreen extends Component {
                 }>
                 <Icon
                   style={styles.rateIcon}
-                  name={hasRated ? 'star' : 'star-border'}
+                  name={previousRating ? 'star' : 'star-border'}
                   size={22}
                   color={'#FFFFFF'}
                 />
@@ -152,7 +151,10 @@ class MovieScreen extends Component {
           </View>
         </ScrollView>
         <View style={showRatingInput || {display: 'none'}}>
-          <RateInput doneAction={(rating) => this.doneRateAction(rating)} />
+          <RateInput
+            startRating={previousRating}
+            doneAction={(rating) => this.doneRateAction(rating)}
+          />
         </View>
       </ImageBackground>
     ) : (
@@ -184,15 +186,15 @@ const styles = StyleSheet.create({
   },
   moviePrincipalInfo: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginRight: 30,
   },
   movieDescriptionView: {
-    width: '60%',
+    width: '100%',
     height: 211,
-    marginLeft: 20,
-    justifyContent: 'flex-end',
-    paddingBottom: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
     marginRight: 30,
   },
   image: {
@@ -201,13 +203,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   movieTitle: {
-    fontSize: 16,
+    fontSize: 35,
     color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 'bold',
-    lineHeight: 19,
-    marginTop: 5,
+    lineHeight: 41,
+    marginTop: 6,
   },
   movieDate: {
     fontSize: 13,
@@ -225,7 +227,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '300',
     lineHeight: 16,
-    marginTop: 5,
+    marginLeft: 5,
   },
   movieInfo: {
     maxWidth: '100%',
@@ -282,12 +284,14 @@ const styles = StyleSheet.create({
   },
   otherInfoText: {
     width: '50%',
+    height: 30,
     fontSize: 12,
     color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: '500',
     lineHeight: 14,
+    overflow: 'hidden',
   },
   movieRating: {
     marginTop: 40,
@@ -360,6 +364,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getMovie: (id) => dispatch(movieDetailActions.fetchMovie(id)),
+    rateMovie: (rating, username) =>
+      dispatch(movieDetailActions.rateMovie(rating, username)),
     getTop100: () => dispatch(genreActions.fetchTop100()),
   };
 };

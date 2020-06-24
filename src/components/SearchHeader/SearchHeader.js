@@ -2,9 +2,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {SearchBar} from 'react-native-elements';
+
+//Actions
 import * as moviesActions from '../../store/actions/movieActions';
+//Assets
+import appLogo from '../../assets/loginLogo.png';
 
 class SearchHeader extends Component {
   state = {
@@ -25,7 +29,7 @@ class SearchHeader extends Component {
   render() {
     return (
       <View style={styles.appTitleView}>
-        <Text style={styles.appTitle}>MS</Text>
+        <Image style={styles.logoImage} source={appLogo} />
         <SearchBar
           containerStyle={styles.searchBar}
           inputContainerStyle={styles.searchBarInside}
@@ -33,11 +37,9 @@ class SearchHeader extends Component {
           onChangeText={this.updateSearch}
           value={this.state.search}
         />
-        <Text
-          style={styles.cancelBtn}
-          onPress={() => this.manageCancelAction()}>
-          Cancel
-        </Text>
+        <TouchableOpacity onPress={() => this.manageCancelAction()}>
+          <Text style={styles.cancelBtn}>Cancel</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -50,16 +52,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-  },
-  appTitle: {
-    fontSize: 20,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    lineHeight: 23,
-    backgroundColor: '#00000000',
-    marginRight: 10,
   },
   cancelBtn: {
     fontSize: 14,
@@ -81,6 +73,12 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     height: 20,
     borderRadius: 30,
+  },
+  logoImage: {
+    width: 26,
+    height: 23,
+    alignSelf: 'center',
+    marginRight: 10,
   },
 });
 

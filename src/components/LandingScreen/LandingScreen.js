@@ -9,6 +9,9 @@ import LinearGradient from 'react-native-linear-gradient';
 //Assets
 import appLogo from '../../assets/loginLogo.png';
 
+//Utils
+import {checkUsername} from '../../utils/asyncStorage';
+
 class LandingScreen extends Component {
   state = {
     fadeAnim: new Animated.Value(0),
@@ -21,8 +24,9 @@ class LandingScreen extends Component {
       toValue: 1,
       duration: 3000,
       useNativeDriver: true,
-    }).start(() => {
-      navigation.navigate('SignUpScreen');
+    }).start(async () => {
+      const username = await checkUsername();
+      navigation.navigate(username ? 'GenreScreen' : 'SignUpScreen');
     });
     return (
       <LinearGradient

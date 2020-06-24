@@ -14,6 +14,9 @@ import {
   FETCH_TOP_100,
   FETCH_TOP_100_FAILED,
   SET_TOP_100,
+  FETCH_RECOMMENDED_MOVIES,
+  FETCH_RECOMMENDED_MOVIES_FAILED,
+  SET_RECOMMENDED_MOVIES,
 } from '../constants/movieConstants';
 
 export const setTopMoviesByGenre = (movies) => {
@@ -105,5 +108,25 @@ export const fetchTop100 = () => {
 export const fetchTop100Failed = () => {
   return {
     type: FETCH_TOP_100_FAILED,
+  };
+};
+
+export const setRecommendedMovies = (movies) => {
+  return {
+    type: SET_RECOMMENDED_MOVIES,
+    recommended: movies,
+  };
+};
+
+export const fetchRecommendedMovies = (username) => {
+  return {
+    type: FETCH_RECOMMENDED_MOVIES,
+    username: username,
+  };
+};
+
+export const fetchRecommendedMoviesFailed = () => {
+  return {
+    type: FETCH_RECOMMENDED_MOVIES_FAILED,
   };
 };

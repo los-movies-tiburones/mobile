@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
@@ -19,6 +20,8 @@ import NavigationBar from '../NavigationBar/NavigationBar';
 
 //Actions
 import * as genreActions from '../../store/actions/genreActions';
+//Utils
+import {checkUsername} from '../../utils/asyncStorage';
 
 import {
   stylesSmall,
@@ -27,10 +30,17 @@ import {
 } from '../Movie/movieStyles';
 
 class GenreScreen extends Component {
+  getRecommendedMoviesToUsername = async () => {
+    const {getRecommendedMovies} = this.props;
+    const username = await checkUsername();
+    getRecommendedMovies(username);
+  };
+
   componentDidMount() {
     const {getGenres, getTop100, genres, top100} = this.props;
     if (!genres.length) getGenres();
     if (!top100.length) getTop100();
+    this.getRecommendedMoviesToUsername();
   }
   render() {
     const {
@@ -59,16 +69,14 @@ class GenreScreen extends Component {
           style={styles.app}>
           <ScrollView style={styles.genresScreenView}>
             <View style={styles.appTitleView}>
-              <Text style={styles.appTitle}>Moviesharkers</Text>
-              <Icon
+              <Text style={styles.appTitle}>MovieSharkers</Text>
+              <TouchableOpacity
                 style={styles.searchIcon}
-                name="search"
-                size={20}
-                color="white"
                 onPress={() =>
                   navigation.navigate('Catalogue', {activeSearch: true})
-                }
-              />
+                }>
+                <Icon name="search" size={20} color="white" />
+              </TouchableOpacity>
             </View>
 
             <GenreSection
@@ -145,7 +153,7 @@ const styles = StyleSheet.create({
   searchIcon: {
     position: 'absolute',
     right: 0,
-    marginRight: 20,
+    marginRight: 43,
   },
 });
 
@@ -163,6 +171,8 @@ const mapDispatchToProps = (dispatch) => {
     getTop100: () => dispatch(genreActions.fetchTop100()),
     getAllTopMoviesByGenre: (allGenres) =>
       dispatch(genreActions.fetchTopMoviesByGenre(allGenres)),
+    getRecommendedMovies: (username) =>
+      dispatch(genreActions.fetchRecommendedMovies(username)),
   };
 };
 
