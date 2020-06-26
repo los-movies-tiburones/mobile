@@ -12,13 +12,11 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-elements';
 
-//Components
+// Components
 import LinearGradient from 'react-native-linear-gradient';
-
-//Actions
+// Actions
 import * as registrationActions from '../../store/actions/registrationActions';
-
-//Assets
+// Assets
 import appLogo from '../../assets/signUpLogo.png';
 
 class SignUpScreen extends Component {
@@ -35,7 +33,6 @@ class SignUpScreen extends Component {
     const {username, password, passwordConfirmation} = this.state;
 
     if (username && password && password === passwordConfirmation) {
-      //navigation.navigate('GenreScreen');
       this.setState({notMatchingPasswordError: false});
       signUp(this.state, navigation);
     } else {
@@ -49,7 +46,7 @@ class SignUpScreen extends Component {
   }
 
   render() {
-    const {username, navigation, loading} = this.props;
+    const {loading, error} = this.props;
     return (
       <LinearGradient
         start={{x: 0.01, y: 0.01}}
@@ -95,9 +92,12 @@ class SignUpScreen extends Component {
           <Text
             style={{
               ...styles.errorMessage,
-              color: !this.state.notMatchingPasswordError ? '#00000000' : 'red',
+              color:
+                !this.state.notMatchingPasswordError && !error
+                  ? '#00000000'
+                  : 'red',
             }}>
-            Passwords don't match
+            Invalid submitted data
           </Text>
           <View style={styles.buttonsContainer}>
             <Button
@@ -229,6 +229,7 @@ const mapStateToProps = (state) => {
   return {
     username: state.registration.username,
     loading: state.registration.loading,
+    error: state.registration.error,
   };
 };
 

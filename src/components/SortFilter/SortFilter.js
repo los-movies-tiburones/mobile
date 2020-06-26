@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Button} from 'react-native-elements';
 
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
@@ -27,19 +27,17 @@ class SortFilter extends Component {
     const {option} = this.state;
     return SortOptions.map((sortOption, i) => {
       return (
-        <View style={styles.sortContainer}>
+        <TouchableOpacity
+          style={styles.sortContainer}
+          onPress={() => this.onChangeSortOption(i)}>
           <Icon
             style={styles.checkIcon}
             name="check"
             size={25}
             color={option === sortOption.value ? 'blue' : 'black'}
           />
-          <Text
-            style={styles.sortOption}
-            onPress={() => this.onChangeSortOption(i)}>
-            {sortOption.key}
-          </Text>
-        </View>
+          <Text style={styles.sortOption}>{sortOption.key}</Text>
+        </TouchableOpacity>
       );
     });
   };

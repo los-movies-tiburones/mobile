@@ -13,18 +13,17 @@ import {
   StyleSheet,
 } from 'react-native';
 
-// presentational components
+// Components
 import Movie from '../Movie/Movie';
 import Header from '../Header/Header';
 import SearchHeader from '../SearchHeader/SearchHeader';
 import NavigationBar from '../NavigationBar/NavigationBar';
-
-//actions
+// Actions
 import * as moviesActions from '../../store/actions/movieActions';
-
+//Styles
 import {stylesLarge, stylesSearch} from '../Movie/movieStyles';
 
-// screen height and width
+// Screen Properties
 const {width, height} = Dimensions.get('window');
 
 class Catalogue extends Component {

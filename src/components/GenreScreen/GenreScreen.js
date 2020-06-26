@@ -13,14 +13,15 @@ import {
 
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
-//Components
+// Components
 import LinearGradient from 'react-native-linear-gradient';
 import GenreSection from '../GenreSection/GenreSection';
 import NavigationBar from '../NavigationBar/NavigationBar';
 
-//Actions
+// Actions
 import * as genreActions from '../../store/actions/genreActions';
-//Utils
+import * as movieDetailActions from '../../store/actions/movieDetailActions';
+// Utils
 import {checkUsername} from '../../utils/asyncStorage';
 
 import {
@@ -32,8 +33,8 @@ import {
 class GenreScreen extends Component {
   getRecommendedMoviesToUsername = async () => {
     const {getRecommendedMovies} = this.props;
-    const username = await checkUsername();
-    getRecommendedMovies(username);
+    const credentials = await checkUsername();
+    getRecommendedMovies(credentials.username);
   };
 
   componentDidMount() {
@@ -49,7 +50,9 @@ class GenreScreen extends Component {
       moviesByGenre,
       getAllTopMoviesByGenre,
       top100,
+      clearMovie,
     } = this.props;
+    clearMovie();
     if (genres.length && !moviesByGenre) {
       getAllTopMoviesByGenre(genres);
     }
@@ -173,6 +176,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(genreActions.fetchTopMoviesByGenre(allGenres)),
     getRecommendedMovies: (username) =>
       dispatch(genreActions.fetchRecommendedMovies(username)),
+    clearMovie: () => dispatch(movieDetailActions.clearMovie()),
   };
 };
 

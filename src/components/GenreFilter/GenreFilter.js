@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
@@ -42,7 +42,10 @@ class GenreFilter extends Component {
     const {genres} = this.props;
     return BurnedGenres.map((genre, i) => {
       return (
-        <View style={styles.genreContainer} key={Math.random()}>
+        <TouchableOpacity
+          style={styles.genreContainer}
+          key={Math.random()}
+          onPress={() => this.onChangedGenreOption(i)}>
           <Icon
             style={styles.checkIcon}
             name="check"
@@ -53,12 +56,8 @@ class GenreFilter extends Component {
                 : 'black'
             }
           />
-          <Text
-            style={styles.genre}
-            onPress={() => this.onChangedGenreOption(i)}>
-            {genre}
-          </Text>
-        </View>
+          <Text style={styles.genre}>{genre}</Text>
+        </TouchableOpacity>
       );
     });
   };

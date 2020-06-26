@@ -10,23 +10,34 @@ const NavigationBar = ({navigation, actualSection}) => {
   let libraryColor = actualSection === 'Top' ? '#FFFFFF' : '#3462FF';
   return (
     <View style={styles.navigationBar}>
-      <TouchableOpacity
-        style={styles.itemView}
-        onPress={() => navigation.navigate('GenreScreen')}>
-        <Icon style={styles.itemIcon} name="star" size={14} color={topColor} />
-        <Text style={{...styles.itemText, color: topColor}}>Top Movies</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.itemView}
-        onPress={() => navigation.navigate('Catalogue', {activeSearch: false})}>
-        <Icon
-          style={styles.itemIcon}
-          name="local-movies"
-          size={14}
-          color={libraryColor}
-        />
-        <Text style={{...styles.itemText, color: libraryColor}}>Library</Text>
-      </TouchableOpacity>
+      <View style={styles.navigationBarView}>
+        <TouchableOpacity
+          style={styles.itemView}
+          onPress={() => navigation.navigate('GenreScreen')}>
+          <Icon
+            style={styles.itemIcon}
+            name="star"
+            size={14}
+            color={topColor}
+          />
+          <Text style={{...styles.itemText, color: topColor}}>
+            Recommendations
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.itemView}
+          onPress={() =>
+            navigation.navigate('Catalogue', {activeSearch: false})
+          }>
+          <Icon
+            style={styles.itemIcon}
+            name="local-movies"
+            size={14}
+            color={libraryColor}
+          />
+          <Text style={{...styles.itemText, color: libraryColor}}>Library</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -37,6 +48,15 @@ const styles = StyleSheet.create({
     height: 63,
     position: 'absolute',
     bottom: 0,
+    backgroundColor: '#000000',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
+  navigationBarView: {
+    width: '80%',
+    height: '100%',
     backgroundColor: '#000000',
     display: 'flex',
     flexDirection: 'row',

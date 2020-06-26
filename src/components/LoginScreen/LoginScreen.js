@@ -12,25 +12,29 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-elements';
 
-//Components
+// Components
 import LinearGradient from 'react-native-linear-gradient';
-
-//Actions
+// Actions
 import * as registrationActions from '../../store/actions/registrationActions';
-//Assets
+// Assets
 import appLogo from '../../assets/loginLogo.png';
 
 class LoginScreen extends Component {
   state = {
     username: '',
     password: '',
+    notMatchingPasswordError: false,
   };
 
   logInAction() {
     const {logIn, navigation} = this.props;
     const {username, password} = this.state;
-    logIn(username, password, navigation);
-    //navigation.navigate('GenreScreen');
+    if (username && password) {
+      this.setState({notMatchingPasswordError: false});
+      logIn(username, password, navigation);
+    } else {
+      this.setState({notMatchingPasswordError: true});
+    }
   }
 
   signUpAction() {
@@ -39,7 +43,7 @@ class LoginScreen extends Component {
   }
 
   render() {
-    const {username, navigation, loading} = this.props;
+    const {loading, error} = this.props;
 
     return (
       <LinearGradient
@@ -74,6 +78,16 @@ class LoginScreen extends Component {
             placeholderTextColor="#FFFFFF"
             secureTextEntry={true}
           />
+          <Text
+            style={{
+              ...styles.errorMessage,
+              color:
+                !this.state.notMatchingPasswordError && !error
+                  ? '#00000000'
+                  : 'red',
+            }}>
+            Invalid user or password
+          </Text>
           <View style={styles.buttonsContainer}>
             <Button
               title="Login"
@@ -157,7 +171,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignSelf: 'center',
-    marginTop: 72,
   },
   loginButton: {
     width: '100%',
@@ -171,6 +184,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20,
     backgroundColor: '#00000000',
+  },
+  errorMessage: {
+    width: '70%',
+    color: 'red',
+    alignSelf: 'center',
+    textAlign: 'left',
+    fontSize: 12,
+    marginTop: 10,
+    marginLeft: 10,
+    marginBottom: 62,
   },
   loading: {
     position: 'absolute',
@@ -187,6 +210,7 @@ const mapStateToProps = (state) => {
   return {
     username: state.registration.username,
     loading: state.registration.loading,
+    error: state.registration.error,
   };
 };
 

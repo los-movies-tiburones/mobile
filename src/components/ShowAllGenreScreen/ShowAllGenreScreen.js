@@ -12,16 +12,16 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-//Components
+// Components
 import LinearGradient from 'react-native-linear-gradient';
 import NavigationHeader from '../NavigationHeader/NavigationHeader';
 import Movie from '../Movie/Movie';
 import NavigationBar from '../NavigationBar/NavigationBar';
-
-//Actions
+// Actions
 import * as genreActions from '../../store/actions/genreActions';
 import {stylesLargeTop} from '../Movie/movieStyles';
 
+// Screen Properties
 const {width, height} = Dimensions.get('window');
 
 class ShowAllGenreScreen extends Component {

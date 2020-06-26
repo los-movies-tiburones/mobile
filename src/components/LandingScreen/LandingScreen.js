@@ -3,13 +3,11 @@ import React, {Component} from 'react';
 
 import {Text, StyleSheet, Image, Animated} from 'react-native';
 
-//Components
+// Components
 import LinearGradient from 'react-native-linear-gradient';
-
-//Assets
+// Assets
 import appLogo from '../../assets/loginLogo.png';
-
-//Utils
+// Utils
 import {checkUsername} from '../../utils/asyncStorage';
 
 class LandingScreen extends Component {
@@ -22,11 +20,14 @@ class LandingScreen extends Component {
     const {fadeAnim} = this.state;
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 3000,
+      duration: 2000,
       useNativeDriver: true,
     }).start(async () => {
-      const username = await checkUsername();
-      navigation.navigate(username ? 'GenreScreen' : 'SignUpScreen');
+      const credentials = await checkUsername();
+      navigation.reset({
+        index: 0,
+        routes: [{name: credentials.username ? 'GenreScreen' : 'SignUpScreen'}],
+      });
     });
     return (
       <LinearGradient

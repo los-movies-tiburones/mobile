@@ -3,14 +3,20 @@ import React from 'react';
 
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 
-//Utils
+// Utils
 import {formatDate} from '../../utils/dates';
 
 const Movie = ({movie, navigation, styles}) => {
   return (
     <TouchableOpacity
       style={styles.listItem}
-      onPress={() => navigation.navigate('Movie', {id: movie.id})}>
+      onPress={() =>
+        navigation.navigate('Movie', {
+          id: movie.id,
+          genres: movie.genres,
+          title: movie.title,
+        })
+      }>
       <View style={styles.listItemView}>
         <Image
           style={styles.image}

@@ -34,59 +34,46 @@ class Header extends Component {
 
   render() {
     const {genderFilterOn, sortFilterOn} = this.state;
-    const {allGenres} = this.props;
+    const {allGenres, genres, sort, changeSearchStatus} = this.props;
     return (
       <View>
         <View style={styles.appTitleView}>
           <Text style={styles.appTitle}>MovieSharkers</Text>
           <TouchableOpacity
             style={styles.searchIcon}
-            onPress={() => this.props.changeSearchStatus()}>
+            onPress={() => changeSearchStatus()}>
             <Icon name="search" size={20} color="white" />
           </TouchableOpacity>
         </View>
 
         <View style={styles.firstLabel}>
           <Text style={styles.firstLabelText}>All Movies</Text>
-          <View style={styles.genreLabel}>
-            <Text
-              style={styles.filterText}
-              onPress={() =>
-                this.setState({genderFilterOn: !this.state.genderFilterOn})
-              }>
-              {this.props.genres.length > 0
-                ? `${this.props.genres.length} selected`
-                : 'All Genres'}
+          <TouchableOpacity
+            style={styles.genreLabel}
+            onPress={() => this.setState({genderFilterOn: !genderFilterOn})}>
+            <Text style={styles.filterText}>
+              {genres.length > 0 ? `${genres.length} selected` : 'All Genres'}
             </Text>
             <Icon
-              style={styles.arrowIcon}
+              style={genderFilterOn ? styles.arrowIconTurned : styles.arrowIcon}
               name="arrow-drop-down"
               size={25}
               color="white"
-              onPress={() =>
-                this.setState({genderFilterOn: !this.state.genderFilterOn})
-              }
             />
-          </View>
-          <View style={styles.sortLabel}>
-            <Text
-              style={styles.filterText}
-              onPress={() =>
-                this.setState({sortFilterOn: !this.state.sortFilterOn})
-              }>
-              {this.getSortTitle(this.props.sort)}
-            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.sortLabel}
+            onPress={() => this.setState({sortFilterOn: !sortFilterOn})}>
+            <Text style={styles.filterText}>{this.getSortTitle(sort)}</Text>
             <Icon
-              style={styles.arrowIcon}
+              style={sortFilterOn ? styles.arrowIconTurned : styles.arrowIcon}
               name="arrow-drop-down"
               size={25}
               color="white"
-              onPress={() =>
-                this.setState({sortFilterOn: !this.state.sortFilterOn})
-              }
             />
-          </View>
+          </TouchableOpacity>
         </View>
+        <Text style={styles.filteredGnres}>{genres.join(', ')}</Text>
         <GenreFilter filterOn={genderFilterOn} allGenres={allGenres} />
         <SortFilter filterOn={sortFilterOn} />
       </View>
@@ -138,6 +125,10 @@ const styles = StyleSheet.create({
   arrowIcon: {
     marginTop: -6,
   },
+  arrowIconTurned: {
+    marginTop: -6,
+    transform: [{rotate: '180deg'}],
+  },
   filterText: {
     fontSize: 12,
     color: '#FFFFFF',
@@ -159,6 +150,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     paddingTop: 10,
+  },
+  filteredGnres: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    lineHeight: 14,
+    backgroundColor: '#00000000',
+    marginLeft: 20,
   },
 });
 

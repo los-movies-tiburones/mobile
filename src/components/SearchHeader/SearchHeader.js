@@ -5,9 +5,9 @@ import {connect} from 'react-redux';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {SearchBar} from 'react-native-elements';
 
-//Actions
+// Actions
 import * as moviesActions from '../../store/actions/movieActions';
-//Assets
+// Assets
 import appLogo from '../../assets/loginLogo.png';
 
 class SearchHeader extends Component {

@@ -14,7 +14,7 @@ const sagaMiddleware = createSagaMiddleware();
 // Redux: Store
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 
-// Middleware: Redux Saga
+// Run sagas into middleware
 sagaMiddleware.run(MoviesSaga);
 sagaMiddleware.run(MovieDetailSaga);
 sagaMiddleware.run(GenreSaga);

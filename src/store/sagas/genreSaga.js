@@ -34,9 +34,10 @@ const fetchTopMoviesByGenreSaga = function* fetchTopMoviesByGenreSaga(action) {
 
 const fetchTopMovies = function* fetchTopMovies(action) {
   try {
-    const response = yield backendRequest().get('/movies/top-rating');
+    const response = yield backendRequest().get('/movies/top-rating', {});
     yield put(setTop100(response.data));
   } catch (error) {
+    console.log(error);
     yield put(fetchTop100Failed());
   }
 };
@@ -60,6 +61,7 @@ const fetchMoviesByGenreSaga = function* fetchMoviesByGenreSaga(action) {
     });
     yield put(setMoviesByGenre(response.data, action.page === 0));
   } catch (error) {
+    console.log(error);
     yield put(fetchMoviesByGenreFailed());
   }
 };
@@ -77,9 +79,8 @@ const fetchRecommendedMoviesSaga = function* fetchRecommendedMoviesSaga(
   action,
 ) {
   try {
-    console.log(action.username);
-    //const response = yield backendRequest().get('/movies/genres');
-    //yield put(setRecommendedMovies(response.data));
+    const response = yield backendRequest().get('/movies/recommendations');
+    yield put(setRecommendedMovies(response.data));
   } catch (error) {
     yield put(fetchRecommendedMoviesFailed());
   }

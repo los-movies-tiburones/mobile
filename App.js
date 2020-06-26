@@ -6,7 +6,7 @@ import {store} from './src/store/store';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-// presentational components
+// App Screens
 import Catalogue from './src/components/Catalogue/Catalogue';
 import MovieScreen from './src/components/MovieScreen/MovieScreen';
 import GenreScreen from './src/components/GenreScreen/GenreScreen';

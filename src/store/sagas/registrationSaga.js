@@ -5,6 +5,7 @@ import {
   registrationFailed,
   logInSuccess,
   logInFailed,
+  logIn,
 } from '../actions/registrationActions';
 import {LOG_IN, REGISTER_USER} from '../constants/registrationConstants';
 import {backendRequest} from '../../utils/axiosService';
@@ -12,23 +13,36 @@ import {storeUsername} from '../../utils/asyncStorage';
 
 const logInSaga = function* logInSaga(action) {
   try {
-    console.log('\n\n\n\n\n', action.credentials);
-    // const response = yield backendRequest().get('/login');
+    const response = yield backendRequest().post('/login', {
+      username: action.credentials.username,
+      password: action.credentials.password,
+    });
     yield put(logInSuccess(action.credentials.username));
-    // action.navigation.navigate('GenreScreen');
-    yield storeUsername(action.credentials.username);
+    yield storeUsername(
+      action.credentials.username,
+      response.headers.authorization,
+    );
+    action.navigation.reset({
+      index: 0,
+      routes: [{name: 'GenreScreen'}],
+    });
   } catch (error) {
+    console.log(error);
     yield put(logInFailed());
   }
 };
 const signUpSaga = function* signUpSaga(action) {
   try {
-    console.log('\n\n\n\n\n', action.user);
-    // const response = yield backendRequest().get('/signUp');
+    yield backendRequest().post('/users/sign-up', {
+      username: action.user.username,
+      password: action.user.password,
+    });
     yield put(registrationSuccess(action.user));
-    yield storeUsername(action.user.username);
-    // action.navigation.navigate('GenreScreen');
+    yield put(
+      logIn(action.user.username, action.user.password, action.navigation),
+    );
   } catch (error) {
+    console.log(error);
     yield put(registrationFailed());
   }
 };

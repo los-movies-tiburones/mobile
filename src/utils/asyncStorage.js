@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
 import {AsyncStorage} from 'react-native';
 
-const storeUsername = function* storeUsername(username) {
+const storeUsername = function* storeUsername(username, token) {
   try {
     yield AsyncStorage.setItem('username', username);
+    yield AsyncStorage.setItem('token', token);
   } catch (error) {
     console.log('Error fetching username');
   }
@@ -12,7 +13,8 @@ const storeUsername = function* storeUsername(username) {
 const checkUsername = async () => {
   try {
     const value = await AsyncStorage.getItem('username');
-    return value;
+    const token = await AsyncStorage.getItem('token');
+    return {username: value, token: token};
   } catch (error) {
     console.log('Error');
   }

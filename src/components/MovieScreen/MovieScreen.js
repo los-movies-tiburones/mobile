@@ -13,32 +13,31 @@ import {
 
 import {formatDate, formatDuration} from '../../utils/dates';
 
-//Components
+// Components
 import RatingStars from '../RatingStars/RatingStars';
 import RatingChart from '../RatingChart/RatingChart';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import GenreSection from '../GenreSection/GenreSection';
 import RateInput from '../RateInput/RateInput';
 import LinearGradient from 'react-native-linear-gradient';
-
-import {stylesHorizontalMovieDetail} from '../Movie/movieStyles';
-
-//Actions
+// Styles
+import {stylesSmallTop100} from '../Movie/movieStyles';
+// Actions
 import * as movieDetailActions from '../../store/actions/movieDetailActions';
-import * as genreActions from '../../store/actions/genreActions';
-
-//Utils
+// Utils
 import {checkUsername} from '../../utils/asyncStorage';
 
 class MovieScreen extends Component {
   state = {
     previousRating: 0,
     showRatingInput: false,
+    requestRecommended: false,
+    recommended: [],
   };
   componentDidMount() {
-    const {getMovie, route, getTop100, top100} = this.props;
+    const {getMovie, route, getRecommendedMovies} = this.props;
     getMovie(route.params.id);
-    if (!top100.length) getTop100();
+    getRecommendedMovies(route.params.genres, route.params.title);
   }
 
   formatBudget = (budget) =>
@@ -46,19 +45,41 @@ class MovieScreen extends Component {
 
   doneRateAction = async (rating) => {
     const {rateMovie} = this.props;
-    const username = await checkUsername();
-    rateMovie(rating, username);
+    const credentials = await checkUsername();
+    rateMovie(rating, credentials.username);
     this.setState({showRatingInput: false, previousRating: rating});
   };
 
+  checkHasRated = async () => {
+    const {movieInstance} = this.props;
+    const {previousRating} = this.state;
+    const credentials = await checkUsername();
+    const hasRated = movieInstance.ratings.find(
+      (rating) => rating.userId === credentials.username,
+    );
+    if (previousRating === 0) {
+      this.setState({previousRating: hasRated ? hasRated.userId : 0});
+    }
+  };
+
   render() {
-    const {movieInstance, navigation, top100} = this.props;
-    const {showRatingInput, previousRating} = this.state;
+    const {
+      movieInstance,
+      navigation,
+      recommendedMovies,
+      getRecommendedMovies,
+    } = this.props;
+    const {showRatingInput, previousRating, requestRecommended} = this.state;
+    if (movieInstance && !requestRecommended) {
+      getRecommendedMovies(movieInstance.genres, movieInstance.title);
+      this.setState({requestRecommended: true});
+    }
 
     return movieInstance ? (
       <ImageBackground
         source={{uri: movieInstance.cover}}
-        style={styles.imageBack}>
+        style={styles.imageBack}
+        blurRadius={0.7}>
         <ScrollView style={styles.movieDetailView}>
           <TouchableOpacity style={styles.backIcon}>
             <Icon
@@ -143,8 +164,8 @@ class MovieScreen extends Component {
               genre={'Recommendations'}
               navigation={navigation}
               allGenres={[]}
-              moviesByGenre={top100}
-              movieStyle={stylesHorizontalMovieDetail}
+              moviesByGenre={recommendedMovies}
+              movieStyle={stylesSmallTop100}
               title={'Recommended Movies'}
               genreTitleStyle={styles.recomendedTitle}
             />
@@ -327,7 +348,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   movieRecommendations: {
-    height: 300,
+    height: 230,
   },
   backIcon: {
     marginTop: 20,
@@ -357,7 +378,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     movieInstance: state.movieDetail.movie,
-    top100: state.topGenre.top100,
+    recommendedMovies: state.movieDetail.recommendedMovies,
   };
 };
 
@@ -366,7 +387,8 @@ const mapDispatchToProps = (dispatch) => {
     getMovie: (id) => dispatch(movieDetailActions.fetchMovie(id)),
     rateMovie: (rating, username) =>
       dispatch(movieDetailActions.rateMovie(rating, username)),
-    getTop100: () => dispatch(genreActions.fetchTop100()),
+    getRecommendedMovies: (genres, title) =>
+      dispatch(movieDetailActions.fetchDetailRecommendedMovies(genres, title)),
   };
 };
 

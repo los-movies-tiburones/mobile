@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-//Components
+// Components
 import Movie from '../Movie/Movie';
 
 class GenreSection extends Component {
@@ -67,12 +67,13 @@ class GenreSection extends Component {
 
 const styles = StyleSheet.create({
   genreSectionView: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
   genreHeader: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingLeft: 20,
     paddingRight: 35,
   },

@@ -178,24 +178,27 @@ const stylesSearch = StyleSheet.create({
   movieTitle: {
     display: 'none',
   },
+  movieYear: {
+    display: 'none',
+  },
 });
 
 const stylesGiant = StyleSheet.create({
   listItem: {
     marginLeft: 12,
     marginRight: 12,
-    height: 305,
+    height: 235,
     backgroundColor: '#00000000',
     borderColor: '#eee',
     marginBottom: 40,
   },
   listItemView: {
-    width: 201,
-    height: 304,
+    width: 154,
+    height: 234,
   },
   image: {
-    width: 201,
-    height: 304,
+    width: 154,
+    height: 234,
     borderRadius: 10,
   },
   movieTitle: {
