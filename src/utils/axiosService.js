@@ -10,12 +10,13 @@ const axiosService = axios.create({
 });
 export default axiosService;
 
-export const backendRequest = () => {
+export const backendRequest = (token) => {
   const functionInstance = axios.create({
     baseURL: 'https://movie-sharkers.herokuapp.com/',
     timeout: 10000,
     headers: {
       'Content-Type': 'application/json',
+      Authorization: token,
     },
   });
   return functionInstance;

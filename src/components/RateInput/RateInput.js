@@ -10,6 +10,10 @@ class RateInput extends Component {
     actualRating: this.props.startRating,
   };
 
+  UNSAFE_componentWillReceiveProps() {
+    this.setState({actualRating: this.props.startRating});
+  }
+
   getStars = () => {
     let stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -30,7 +34,6 @@ class RateInput extends Component {
   render() {
     const {doneAction} = this.props;
     const {actualRating} = this.state;
-
     return (
       <View style={styles.ratingBar}>
         <View style={styles.ratingStars}>{this.getStars()}</View>

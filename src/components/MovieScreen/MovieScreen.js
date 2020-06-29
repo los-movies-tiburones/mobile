@@ -35,45 +35,37 @@ class MovieScreen extends Component {
     recommended: [],
   };
   componentDidMount() {
-    const {getMovie, route, getRecommendedMovies} = this.props;
+    const {getMovie, route} = this.props;
     getMovie(route.params.id);
-    getRecommendedMovies(route.params.genres, route.params.title);
   }
 
   formatBudget = (budget) =>
     budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
   doneRateAction = async (rating) => {
-    const {rateMovie} = this.props;
+    const {rateMovie, movieInstance} = this.props;
     const credentials = await checkUsername();
-    rateMovie(rating, credentials.username);
+    rateMovie(movieInstance.id, rating, credentials.token);
     this.setState({showRatingInput: false, previousRating: rating});
   };
 
   checkHasRated = async () => {
-    const {movieInstance} = this.props;
+    const {movieInstance, username} = this.props;
     const {previousRating} = this.state;
-    const credentials = await checkUsername();
-    const hasRated = movieInstance.ratings.find(
-      (rating) => rating.userId === credentials.username,
-    );
-    if (previousRating === 0) {
-      this.setState({previousRating: hasRated ? hasRated.userId : 0});
+    const hasRated = movieInstance
+      ? movieInstance.ratings.find((rating) => rating.userIdString === username)
+      : null;
+
+    if (hasRated && previousRating !== hasRated.value) {
+      this.setState({previousRating: hasRated.value});
     }
   };
 
   render() {
-    const {
-      movieInstance,
-      navigation,
-      recommendedMovies,
-      getRecommendedMovies,
-    } = this.props;
-    const {showRatingInput, previousRating, requestRecommended} = this.state;
-    if (movieInstance && !requestRecommended) {
-      getRecommendedMovies(movieInstance.genres, movieInstance.title);
-      this.setState({requestRecommended: true});
-    }
+    const {movieInstance, navigation} = this.props;
+    const {showRatingInput, previousRating} = this.state;
+
+    this.checkHasRated();
 
     return movieInstance ? (
       <ImageBackground
@@ -86,7 +78,9 @@ class MovieScreen extends Component {
               name="arrow-back"
               size={22}
               color={'#FFFFFF'}
-              onPress={() => navigation.goBack()}
+              onPress={() => {
+                navigation.goBack();
+              }}
             />
           </TouchableOpacity>
           <View style={styles.moviePrincipalInfo}>
@@ -164,7 +158,7 @@ class MovieScreen extends Component {
               genre={'Recommendations'}
               navigation={navigation}
               allGenres={[]}
-              moviesByGenre={recommendedMovies}
+              moviesByGenre={movieInstance.recommendations}
               movieStyle={stylesSmallTop100}
               title={'Recommended Movies'}
               genreTitleStyle={styles.recomendedTitle}
@@ -378,17 +372,15 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     movieInstance: state.movieDetail.movie,
-    recommendedMovies: state.movieDetail.recommendedMovies,
+    username: state.registration.username,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getMovie: (id) => dispatch(movieDetailActions.fetchMovie(id)),
-    rateMovie: (rating, username) =>
-      dispatch(movieDetailActions.rateMovie(rating, username)),
-    getRecommendedMovies: (genres, title) =>
-      dispatch(movieDetailActions.fetchDetailRecommendedMovies(genres, title)),
+    rateMovie: (movieId, rating, token) =>
+      dispatch(movieDetailActions.rateMovie(movieId, rating, token)),
   };
 };
 

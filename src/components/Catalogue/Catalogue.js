@@ -124,6 +124,7 @@ class Catalogue extends Component {
                   width: '100%',
                   backgroundColor: '#00000000',
                   paddingBottom: 200,
+                  paddingLeft: 5,
                 }}
                 numColumns={3}
                 data={activeSearch && !title ? [] : movies}
@@ -131,7 +132,7 @@ class Catalogue extends Component {
                   <View
                     style={{
                       marginTop: 25,
-                      width: '33%',
+                      width: '32%',
                     }}>
                     <Movie
                       movie={item}

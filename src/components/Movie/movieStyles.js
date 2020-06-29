@@ -121,8 +121,7 @@ const stylesLarge = StyleSheet.create({
 
 const stylesLargeTop = StyleSheet.create({
   listItem: {
-    paddingLeft: 12,
-    paddingRight: 12,
+    width: '80%',
     height: 200,
     backgroundColor: '#00000000',
     borderColor: '#eee',

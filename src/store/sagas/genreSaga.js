@@ -79,7 +79,9 @@ const fetchRecommendedMoviesSaga = function* fetchRecommendedMoviesSaga(
   action,
 ) {
   try {
-    const response = yield backendRequest().get('/movies/recommendations');
+    const response = yield backendRequest(action.token).get(
+      '/movies/recommendations',
+    );
     yield put(setRecommendedMovies(response.data));
   } catch (error) {
     yield put(fetchRecommendedMoviesFailed());

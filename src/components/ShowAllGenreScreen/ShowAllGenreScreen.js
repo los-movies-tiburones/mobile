@@ -104,8 +104,8 @@ class ShowAllGenreScreen extends Component {
             contentContainerStyle={{
               width: '100%',
               backgroundColor: '#00000000',
-              paddingLeft: 7,
-              paddingRight: 12,
+              paddingLeft: 20,
+              paddingRight: 20,
             }}
             numColumns={3}
             data={moviesByGenre}
@@ -113,7 +113,7 @@ class ShowAllGenreScreen extends Component {
               <View
                 style={{
                   marginTop: 25,
-                  width: '34%',
+                  width: '35%',
                 }}>
                 <Movie
                   movie={item}

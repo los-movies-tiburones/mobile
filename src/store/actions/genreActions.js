@@ -118,10 +118,10 @@ export const setRecommendedMovies = (movies) => {
   };
 };
 
-export const fetchRecommendedMovies = (username) => {
+export const fetchRecommendedMovies = (token) => {
   return {
     type: FETCH_RECOMMENDED_MOVIES,
-    username: username,
+    token: token,
   };
 };
 

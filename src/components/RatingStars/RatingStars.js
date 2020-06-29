@@ -29,7 +29,7 @@ const RatingStars = ({rating}) => {
     <>
       <View style={styles.ratingView}>
         {getStars()}
-        <Text style={styles.ratingText}>{rating}</Text>
+        <Text style={styles.ratingText}>{rating.toFixed(2)}</Text>
       </View>
     </>
   );

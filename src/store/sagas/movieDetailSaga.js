@@ -25,9 +25,12 @@ const fetchMovieSaga = function* fetchMovieSaga(action) {
 
 const rateMovieSaga = function* rateMovieSaga(action) {
   try {
-    //const response = yield backendRequest().post(`/movies/${action.id}`);
-    console.log(action.rating, action.username);
+    yield backendRequest(action.token).post(
+      `/movies/${action.id}/ratings`,
+      JSON.stringify(action.rating),
+    );
   } catch (error) {
+    console.log(error.response.status);
     yield put(rateMovieFailed());
   }
 };
@@ -45,7 +48,6 @@ const fetchDetailRecommendedMoviesSaga = function* fetchDetailRecommendedMoviesS
           ? action.genres.slice(0, 3).join(',')
           : action.genres.join(','),
     };
-    console.log(action.genres);
     const response = yield backendRequest().get('/movies', {
       params: paramsRequest,
     });

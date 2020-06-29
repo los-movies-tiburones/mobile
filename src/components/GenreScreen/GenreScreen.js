@@ -21,6 +21,7 @@ import NavigationBar from '../NavigationBar/NavigationBar';
 // Actions
 import * as genreActions from '../../store/actions/genreActions';
 import * as movieDetailActions from '../../store/actions/movieDetailActions';
+import * as registrationActions from '../../store/actions/registrationActions';
 // Utils
 import {checkUsername} from '../../utils/asyncStorage';
 
@@ -31,17 +32,24 @@ import {
 } from '../Movie/movieStyles';
 
 class GenreScreen extends Component {
-  getRecommendedMoviesToUsername = async () => {
+  getRecommendedMoviesToToken = async () => {
     const {getRecommendedMovies} = this.props;
     const credentials = await checkUsername();
-    getRecommendedMovies(credentials.username);
+    getRecommendedMovies(credentials.token);
+  };
+
+  setUsernameAsync = async () => {
+    const {setUsername} = this.props;
+    const credentials = await checkUsername();
+    setUsername(credentials.username);
   };
 
   componentDidMount() {
     const {getGenres, getTop100, genres, top100} = this.props;
     if (!genres.length) getGenres();
     if (!top100.length) getTop100();
-    this.getRecommendedMoviesToUsername();
+    this.getRecommendedMoviesToToken();
+    this.setUsernameAsync();
   }
   render() {
     const {
@@ -51,7 +59,9 @@ class GenreScreen extends Component {
       getAllTopMoviesByGenre,
       top100,
       clearMovie,
+      recommendations,
     } = this.props;
+
     clearMovie();
     if (genres.length && !moviesByGenre) {
       getAllTopMoviesByGenre(genres);
@@ -86,7 +96,7 @@ class GenreScreen extends Component {
               genre={'Recommendations'}
               navigation={navigation}
               allGenres={genres}
-              moviesByGenre={top100}
+              moviesByGenre={recommendations}
               movieStyle={stylesGiant}
               title={'Recommendations'}
             />
@@ -165,6 +175,8 @@ const mapStateToProps = (state) => {
     genres: state.topGenre.genres,
     top100: state.topGenre.top100,
     moviesByGenre: state.topGenre.moviesByGenre,
+    recommendations: state.topGenre.recommended,
+    username: state.registration.username,
   };
 };
 
@@ -177,6 +189,8 @@ const mapDispatchToProps = (dispatch) => {
     getRecommendedMovies: (username) =>
       dispatch(genreActions.fetchRecommendedMovies(username)),
     clearMovie: () => dispatch(movieDetailActions.clearMovie()),
+    setUsername: (username) =>
+      dispatch(registrationActions.logInSuccess(username)),
   };
 };
 

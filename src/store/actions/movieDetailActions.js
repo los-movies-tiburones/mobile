@@ -31,11 +31,12 @@ export const fetchMovieFailed = () => {
   };
 };
 
-export const rateMovie = (rating, username) => {
+export const rateMovie = (id, rating, token) => {
   return {
     type: RATE_MOVIE,
     rating: rating,
-    username: username,
+    token: token,
+    id: id,
   };
 };
 
