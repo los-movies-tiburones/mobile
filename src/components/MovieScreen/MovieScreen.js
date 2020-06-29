@@ -79,7 +79,7 @@ class MovieScreen extends Component {
               size={22}
               color={'#FFFFFF'}
               onPress={() => {
-                navigation.goBack();
+                navigation.popToTop();
               }}
             />
           </TouchableOpacity>

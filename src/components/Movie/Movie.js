@@ -11,7 +11,7 @@ const Movie = ({movie, navigation, styles}) => {
     <TouchableOpacity
       style={styles.listItem}
       onPress={() =>
-        navigation.navigate('Movie', {
+        navigation.push('Movie', {
           id: movie.id,
           genres: movie.genres,
           title: movie.title,

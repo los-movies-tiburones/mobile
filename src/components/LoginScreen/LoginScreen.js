@@ -86,7 +86,7 @@ class LoginScreen extends Component {
                   ? '#00000000'
                   : 'red',
             }}>
-            Invalid user or password
+            Incorrect username or password
           </Text>
           <View style={styles.buttonsContainer}>
             <Button

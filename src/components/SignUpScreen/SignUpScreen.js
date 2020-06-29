@@ -97,7 +97,7 @@ class SignUpScreen extends Component {
                   ? '#00000000'
                   : 'red',
             }}>
-            Invalid submitted data
+            Incorrect username or password
           </Text>
           <View style={styles.buttonsContainer}>
             <Button
