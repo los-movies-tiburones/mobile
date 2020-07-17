@@ -6,16 +6,19 @@ import {View, Text, TouchableOpacity, Image} from 'react-native';
 // Utils
 import {formatDate} from '../../utils/dates';
 
-const Movie = ({movie, navigation, styles}) => {
+const Movie = ({movie, navigation, styles, disableNavigation}) => {
   return (
     <TouchableOpacity
       style={styles.listItem}
-      onPress={() =>
-        navigation.push('Movie', {
-          id: movie.id,
-          genres: movie.genres,
-          title: movie.title,
-        })
+      onPress={
+        disableNavigation
+          ? () => console.log('No detail detected')
+          : () =>
+              navigation.push('Movie', {
+                id: movie.id,
+                genres: movie.genres,
+                title: movie.title,
+              })
       }>
       <View style={styles.listItemView}>
         <Image

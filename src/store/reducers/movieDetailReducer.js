@@ -5,6 +5,7 @@ const initialState = {
   movie: null,
   recommendedMovies: [],
   error: false,
+  reviews: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -41,6 +42,26 @@ const reducer = (state = initialState, action) => {
         ...state,
         recommendedMovies: [],
         movie: null,
+      };
+    case actionTypes.SET_REVIEWS:
+      return {
+        ...state,
+        reviews: action.reviews,
+      };
+    case actionTypes.FETCH_REVIEWS_FAILED:
+      return {
+        ...state,
+        error: true,
+      };
+    case actionTypes.REVIEW_MOVIE_FAILED:
+      return {
+        ...state,
+        error: true,
+      };
+    case actionTypes.ADD_TO_MY_LIST_FAILED:
+      return {
+        ...state,
+        error: true,
       };
     default:
       return state;

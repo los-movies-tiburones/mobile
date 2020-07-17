@@ -129,6 +129,7 @@ class Catalogue extends Component {
                 data={activeSearch && !title ? [] : movies}
                 renderItem={({item}) => (
                   <View
+                    key={Math.random()}
                     style={{
                       marginTop: 25,
                       width: '33%',

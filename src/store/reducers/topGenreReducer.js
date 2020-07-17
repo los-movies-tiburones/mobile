@@ -6,6 +6,7 @@ const initialState = {
   genres: [],
   top100: [],
   recommended: [],
+  nowMovies: [],
   error: false,
 };
 
@@ -47,6 +48,16 @@ const reducer = (state = initialState, action) => {
         recommended: action.recommended,
       };
     case actionTypes.FETCH_RECOMMENDED_MOVIES_FAILED:
+      return {
+        ...state,
+        error: true,
+      };
+    case actionTypes.SET_NOW_MOVIES:
+      return {
+        ...state,
+        nowMovies: action.nowMovies,
+      };
+    case actionTypes.FETCH_NOW_MOVIES_FAILED:
       return {
         ...state,
         error: true,

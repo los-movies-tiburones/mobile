@@ -16,10 +16,11 @@ export const logIn = (username, password, navigation) => {
   };
 };
 
-export const logInSuccess = (userName) => {
+export const logInSuccess = (userName, token) => {
   return {
     type: USER_AUTHORIZED,
     username: userName,
+    token: token,
   };
 };
 

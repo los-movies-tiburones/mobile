@@ -6,17 +6,26 @@ import {
   rateMovieFailed,
   setDetailRecommendedMovies,
   fetchDetailRecommendedMoviesFailed,
+  setReviews,
+  fetchReviwsFailed,
+  reviewMovieFailed,
+  addToMyListFailed,
 } from '../actions/movieDetailActions';
 import {
   FETCH_MOVIE_BY_ID,
   RATE_MOVIE,
   FETCH_DETAIL_RECOMMENDED_MOVIES,
+  FETCH_REVIEWS,
+  REVIEW_MOVIE,
+  ADD_TO_MY_LIST,
 } from '../constants/movieConstants';
 import {backendRequest} from '../../utils/axiosService';
 
 const fetchMovieSaga = function* fetchMovieSaga(action) {
   try {
-    const response = yield backendRequest().get(`/movies/${action.id}`);
+    const response = yield backendRequest(action.token).get(
+      `/movies/${action.id}`,
+    );
     yield put(setMovie(response.data));
   } catch (error) {
     yield put(fetchMovieFailed());
@@ -57,6 +66,84 @@ const fetchDetailRecommendedMoviesSaga = function* fetchDetailRecommendedMoviesS
   }
 };
 
+const fetchReviewsSaga = function* fetchReviewsSaga(action) {
+  try {
+    const burnedReviews = [
+      {
+        title: 'Clarisee Arzina',
+        subtitle: 'Times',
+        information:
+          'Though it\'s not the most original or beautifully animated kids\' movie out there, "Balto" is engaging, and kids will probably be quite entertained.',
+      },
+      {
+        title: 'Daniela Pepa',
+        subtitle: 'Independent(UK)',
+        information:
+          'Though it\'s not the most original or beautifully animated kids\' movie out there, "Balto" is engaging, and kids will probably be quite entertained.',
+      },
+      {
+        title: 'Clarisee Arzina',
+        subtitle: 'Times',
+        information:
+          'Though it\'s not the most original or beautifully animated kids\' movie out there, "Balto" is engaging, and kids will probably be quite entertained.',
+      },
+      {
+        title: 'Daniela Pepa',
+        subtitle: 'Independent(UK)',
+        information:
+          'Though it\'s not the most original or beautifully animated kids\' movie out there, "Balto" is engaging, and kids will probably be quite entertained.',
+      },
+      {
+        title: 'Clarisee Arzina',
+        subtitle: 'Times',
+        information:
+          'Though it\'s not the most original or beautifully animated kids\' movie out there, "Balto" is engaging, and kids will probably be quite entertained.',
+      },
+      {
+        title: 'Daniela Pepa',
+        subtitle: 'Independent(UK)',
+        information:
+          'Though it\'s not the most original or beautifully animated kids\' movie out there, "Balto" is engaging, and kids will probably be quite entertained.',
+      },
+      {
+        title: 'Clarisee Arzina',
+        subtitle: 'Times',
+        information:
+          'Though it\'s not the most original or beautifully animated kids\' movie out there, "Balto" is engaging, and kids will probably be quite entertained.',
+      },
+      {
+        title: 'Daniela Pepa',
+        subtitle: 'Independent(UK)',
+        information:
+          'Though it\'s not the most original or beautifully animated kids\' movie out there, "Balto" is engaging, and kids will probably be quite entertained.',
+      },
+    ];
+    yield put(setReviews(burnedReviews));
+  } catch (error) {
+    yield put(fetchReviwsFailed());
+  }
+};
+
+const reviewMovieSaga = function* reviewMovieSaga(action) {
+  try {
+    yield backendRequest(action.token).post(
+      `/movies/${action.id}/reviews`,
+      JSON.stringify(action.review),
+    );
+  } catch (error) {
+    console.log(error.response.status);
+    yield put(reviewMovieFailed());
+  }
+};
+
+const addMovieToListSaga = function* addMovieToListSaga(action) {
+  try {
+    yield backendRequest(action.token).post(`/movies/${action.id}/favorites`);
+  } catch (error) {
+    yield put(addToMyListFailed());
+  }
+};
+
 export function* MovieDetailSaga() {
   yield takeEvery(FETCH_MOVIE_BY_ID, fetchMovieSaga);
   yield takeEvery(RATE_MOVIE, rateMovieSaga);
@@ -64,4 +151,7 @@ export function* MovieDetailSaga() {
     FETCH_DETAIL_RECOMMENDED_MOVIES,
     fetchDetailRecommendedMoviesSaga,
   );
+  yield takeEvery(FETCH_REVIEWS, fetchReviewsSaga);
+  yield takeEvery(REVIEW_MOVIE, reviewMovieSaga);
+  yield takeEvery(ADD_TO_MY_LIST, addMovieToListSaga);
 }

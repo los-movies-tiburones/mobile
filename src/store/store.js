@@ -7,6 +7,8 @@ import {MoviesSaga} from './sagas/moviesSaga';
 import {MovieDetailSaga} from './sagas/movieDetailSaga';
 import {GenreSaga} from './sagas/genreSaga';
 import {RegistrationSaga} from './sagas/registrationSaga';
+import {MyListSaga} from './sagas/myListSaga';
+import {ComingSoonSaga} from './sagas/comingSoonSaga';
 
 // Middleware: Redux Saga
 const sagaMiddleware = createSagaMiddleware();
@@ -19,6 +21,8 @@ sagaMiddleware.run(MoviesSaga);
 sagaMiddleware.run(MovieDetailSaga);
 sagaMiddleware.run(GenreSaga);
 sagaMiddleware.run(RegistrationSaga);
+sagaMiddleware.run(MyListSaga);
+sagaMiddleware.run(ComingSoonSaga);
 
 // Exports
 export {store};

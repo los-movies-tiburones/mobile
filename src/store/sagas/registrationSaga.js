@@ -17,14 +17,16 @@ const logInSaga = function* logInSaga(action) {
       username: action.credentials.username,
       password: action.credentials.password,
     });
-    yield put(logInSuccess(action.credentials.username));
+    yield put(
+      logInSuccess(action.credentials.username, response.headers.authorization),
+    );
     yield storeUsername(
       action.credentials.username,
       response.headers.authorization,
     );
     action.navigation.reset({
       index: 0,
-      routes: [{name: 'GenreScreen'}],
+      routes: [{name: 'OnBoardingScreen'}],
     });
   } catch (error) {
     console.log(error);

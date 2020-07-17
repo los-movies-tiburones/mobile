@@ -3,6 +3,7 @@ import * as actionTypes from '../constants/registrationConstants';
 
 const initialState = {
   username: '',
+  token: '',
   loading: false,
   error: false,
 };
@@ -13,6 +14,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         username: action.username,
+        token: action.token,
         loading: false,
       };
     case actionTypes.USER_NOT_AUTHORIZED:

@@ -29,6 +29,7 @@ import {
   stylesSmall,
   stylesGiant,
   stylesSmallTop100,
+  stylesNowInCinema,
 } from '../Movie/movieStyles';
 
 class GenreScreen extends Component {
@@ -41,13 +42,21 @@ class GenreScreen extends Component {
   setUsernameAsync = async () => {
     const {setUsername} = this.props;
     const credentials = await checkUsername();
-    setUsername(credentials.username);
+    setUsername(credentials.username, credentials.token);
   };
 
   componentDidMount() {
-    const {getGenres, getTop100, genres, top100} = this.props;
+    const {
+      getGenres,
+      getTop100,
+      getNowMovies,
+      genres,
+      top100,
+      nowMovies,
+    } = this.props;
     if (!genres.length) getGenres();
     if (!top100.length) getTop100();
+    if (!nowMovies.length) getNowMovies();
     this.getRecommendedMoviesToToken();
     this.setUsernameAsync();
   }
@@ -60,6 +69,7 @@ class GenreScreen extends Component {
       top100,
       clearMovie,
       recommendations,
+      nowMovies,
     } = this.props;
 
     clearMovie();
@@ -92,6 +102,15 @@ class GenreScreen extends Component {
               </TouchableOpacity>
             </View>
 
+            <GenreSection
+              genre={'Now in Cinemas'}
+              navigation={navigation}
+              allGenres={genres}
+              moviesByGenre={nowMovies}
+              movieStyle={stylesNowInCinema}
+              title={'Now in Cinemas'}
+              disableNavigation
+            />
             <GenreSection
               genre={'Recommendations'}
               navigation={navigation}
@@ -130,7 +149,7 @@ class GenreScreen extends Component {
             )}
           </ScrollView>
         </LinearGradient>
-        <NavigationBar navigation={navigation} actualSection={'Top'} />
+        <NavigationBar navigation={navigation} actualSection={'Recommended'} />
       </>
     );
   }
@@ -174,6 +193,7 @@ const mapStateToProps = (state) => {
   return {
     genres: state.topGenre.genres,
     top100: state.topGenre.top100,
+    nowMovies: state.topGenre.nowMovies,
     moviesByGenre: state.topGenre.moviesByGenre,
     recommendations: state.topGenre.recommended,
     username: state.registration.username,
@@ -189,8 +209,9 @@ const mapDispatchToProps = (dispatch) => {
     getRecommendedMovies: (username) =>
       dispatch(genreActions.fetchRecommendedMovies(username)),
     clearMovie: () => dispatch(movieDetailActions.clearMovie()),
-    setUsername: (username) =>
-      dispatch(registrationActions.logInSuccess(username)),
+    setUsername: (username, token) =>
+      dispatch(registrationActions.logInSuccess(username, token)),
+    getNowMovies: () => dispatch(genreActions.fetchNowMovies()),
   };
 };
 

@@ -1,17 +1,16 @@
 /* eslint-disable prettier/prettier */
-import React, {Component} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {connect} from 'react-redux';
 
 import {
   View,
   Text,
-  StyleSheet,
   ImageBackground,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
 
-import {formatDate, formatDuration} from '../../utils/dates';
+import {Button} from 'react-native-elements';
 
 // Components
 import RatingStars from '../RatingStars/RatingStars';
@@ -20,367 +19,187 @@ import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import GenreSection from '../GenreSection/GenreSection';
 import RateInput from '../RateInput/RateInput';
 import LinearGradient from 'react-native-linear-gradient';
+import MovieTrailer from '../MovieTrailer/movieTrailer';
+import MovieDescription from '../MovieDescription/MovieDescription';
+import MovieOtherInformation from '../MovieDescription/MovieOtherInformation';
+import MovieActionButtons from '../MovieActionButtons/MovieActionButtons';
+import ReviewsSection from '../ReviewsSection/ReviewsSection';
 // Styles
 import {stylesSmallTop100} from '../Movie/movieStyles';
+import {styles} from './movieScreenStyles';
 // Actions
 import * as movieDetailActions from '../../store/actions/movieDetailActions';
 // Utils
 import {checkUsername} from '../../utils/asyncStorage';
 
-class MovieScreen extends Component {
-  state = {
-    previousRating: 0,
-    showRatingInput: false,
-    requestRecommended: false,
-    recommended: [],
-  };
-  componentDidMount() {
-    const {getMovie, route} = this.props;
-    getMovie(route.params.id);
-  }
+const MovieScreen = ({
+  getMovie,
+  route,
+  movieInstance,
+  navigation,
+  username,
+  token,
+  rateMovie,
+  getReviews,
+  reviews,
+  addToMyList,
+}) => {
+  const [previousRating, setPreviousRating] = useState(0);
+  const [showRatingInput, setShowRatingInput] = useState(false);
+  const [playVideo, setPlayVideo] = useState(false);
+  const [isInList, setIsInList] = useState(false);
 
-  formatBudget = (budget) =>
-    budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  useEffect(() => {
+    getMovie(route.params.id, token);
+    getReviews(route.params.id);
+    checkHasRated();
+  }, [route.params.id, getMovie, checkHasRated, getReviews, token]);
 
-  doneRateAction = async (rating) => {
-    const {rateMovie, movieInstance} = this.props;
-    const credentials = await checkUsername();
+  const doneRateAction = async (rating) => {
+    const credentials = username
+      ? {username: username, token: token}
+      : await checkUsername();
     rateMovie(movieInstance.id, rating, credentials.token);
-    this.setState({showRatingInput: false, previousRating: rating});
+    setShowRatingInput(false);
+    setPreviousRating(rating);
   };
 
-  checkHasRated = async () => {
-    const {movieInstance, username} = this.props;
-    const {previousRating} = this.state;
+  const checkHasRated = useCallback(async () => {
     const hasRated = movieInstance
       ? movieInstance.ratings.find((rating) => rating.userIdString === username)
       : null;
-
     if (hasRated && previousRating !== hasRated.value) {
-      this.setState({previousRating: hasRated.value});
+      setPreviousRating(hasRated.value);
     }
+  }, [movieInstance, previousRating, username]);
+
+  const showRatingInputAction = () => {
+    setShowRatingInput(!showRatingInput);
   };
 
-  render() {
-    const {movieInstance, navigation} = this.props;
-    const {showRatingInput, previousRating} = this.state;
+  const addToListAction = () => {
+    setIsInList(true);
+    addToMyList(movieInstance.id, token);
+  };
+  return movieInstance ? (
+    <ImageBackground
+      source={{uri: movieInstance.cover}}
+      style={styles.imageBack}
+      blurRadius={0.7}>
+      <ScrollView style={styles.movieDetailView}>
+        <TouchableOpacity style={styles.backIcon}>
+          <Icon
+            name="arrow-back"
+            size={22}
+            color={'#FFFFFF'}
+            onPress={() => {
+              navigation.popToTop();
+            }}
+          />
+        </TouchableOpacity>
 
-    this.checkHasRated();
+        <MovieTrailer
+          playVideo={playVideo}
+          videoId={movieInstance.videoId}
+          playAction={() => setPlayVideo(true)}
+        />
 
-    return movieInstance ? (
-      <ImageBackground
-        source={{uri: movieInstance.cover}}
-        style={styles.imageBack}
-        blurRadius={0.7}>
-        <ScrollView style={styles.movieDetailView}>
-          <TouchableOpacity style={styles.backIcon}>
-            <Icon
-              name="arrow-back"
-              size={22}
-              color={'#FFFFFF'}
-              onPress={() => {
-                navigation.popToTop();
-              }}
-            />
-          </TouchableOpacity>
-          <View style={styles.moviePrincipalInfo}>
-            <View style={styles.movieDescriptionView}>
-              <Text style={styles.movieDate}>
-                {formatDate(movieInstance.year).split(', ')[1]}
-              </Text>
-              <Text style={styles.movieCategories}>
-                {movieInstance.genres.join(', ')}
-              </Text>
-            </View>
-            <Text style={styles.movieTitle}>{movieInstance.title}</Text>
-          </View>
-          <View style={styles.movieInfo}>
-            <Text style={styles.movieDuration}>
-              {formatDuration(movieInstance.runtime)}
-            </Text>
-            <Text style={styles.movieDuration}>
-              {formatDate(movieInstance.year)} (
-              {movieInstance.productionCountries[0].name})
-            </Text>
-          </View>
-          <Text style={styles.movieOverview}>{movieInstance.overview}</Text>
-          <View style={styles.otherInfoContainer}>
-            <View style={styles.otherInfoLeft}>
-              <View style={styles.otherInfo}>
-                <Text style={styles.otherInfoTitle}>Budget: </Text>
-                <Text style={styles.otherInfoText}>
-                  {this.formatBudget(movieInstance.budget)}
-                </Text>
-              </View>
-              <View style={styles.otherInfo}>
-                <Text style={styles.otherInfoTitle}>Spoken Languajes: </Text>
-                <Text style={styles.otherInfoText}>
-                  {movieInstance.spokenLanguages
-                    .map((languaje) => languaje.name)
-                    .join(', ')}
-                </Text>
-              </View>
-              <View style={styles.otherInfo}>
-                <Text style={styles.otherInfoTitle}>
-                  Production Companies:{' '}
-                </Text>
-                <Text style={styles.otherInfoText}>
-                  {movieInstance.productionCompanies
-                    .map((company) => company.name)
-                    .join(', ')}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.otherInfoRight}>
-              <TouchableOpacity
-                style={styles.rateItem}
-                onPress={() =>
-                  this.setState({showRatingInput: !showRatingInput})
-                }>
-                <Icon
-                  style={styles.rateIcon}
-                  name={previousRating ? 'star' : 'star-border'}
-                  size={22}
-                  color={'#FFFFFF'}
-                />
-                <Text style={styles.rateText}>Rate</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.movieRating}>
-            <RatingChart ratings={movieInstance.ratings} />
-          </View>
-          <View style={styles.movieRatingStars}>
-            <RatingStars rating={movieInstance.averageRating} />
-          </View>
-          <View style={styles.movieRecommendations}>
-            <GenreSection
-              genre={'Recommendations'}
-              navigation={navigation}
-              allGenres={[]}
-              moviesByGenre={movieInstance.recommendations}
-              movieStyle={stylesSmallTop100}
-              title={'Recommended Movies'}
-              genreTitleStyle={styles.recomendedTitle}
-            />
-          </View>
-        </ScrollView>
-        <View style={showRatingInput || {display: 'none'}}>
-          <RateInput
-            startRating={previousRating}
-            doneAction={(rating) => this.doneRateAction(rating)}
+        <MovieDescription movieInstance={movieInstance} playVideo={playVideo} />
+
+        <View style={styles.otherInfoContainer}>
+          <MovieActionButtons
+            previousRating={previousRating}
+            showRatingAction={() => showRatingInputAction()}
+            addToListAction={
+              !isInList
+                ? () => addToListAction()
+                : () => console.log('Already added')
+            }
+            isInList={isInList || movieInstance.inMyList}
+          />
+          <MovieOtherInformation movieInstance={movieInstance} />
+        </View>
+        <View style={styles.movieRatingStars}>
+          <RatingStars rating={movieInstance.averageRating} />
+        </View>
+        <View style={styles.movieRating}>
+          <RatingChart ratings={movieInstance.ratings} />
+        </View>
+        <View style={styles.movieRecommendations}>
+          <GenreSection
+            genre={'Recommendations'}
+            navigation={navigation}
+            allGenres={[]}
+            moviesByGenre={movieInstance.recommendations}
+            movieStyle={stylesSmallTop100}
+            title={'Recommended Movies'}
+            genreTitleStyle={styles.recomendedTitle}
           />
         </View>
-      </ImageBackground>
-    ) : (
-      <LinearGradient
-        start={{x: 0.01, y: 0.01}}
-        end={{x: 0, y: 1}}
-        colors={[
-          '#000000',
-          '#000000',
-          '#000000',
-          '#000000',
-          '#243676',
-          '#3462FF',
-        ]}
-        style={styles.loadingMovieTemplate}>
-        <View style={styles.loadingMovieView}>
-          <Text style={styles.loadingMovieTitle}>{'Loading movie ...'}</Text>
-        </View>
-      </LinearGradient>
-    );
-  }
-}
+        {!movieInstance.reviews.length || (
+          <View style={styles.movieReviews}>
+            <ReviewsSection reviews={[...movieInstance.reviews, ...reviews]} />
+          </View>
+        )}
 
-const styles = StyleSheet.create({
-  movieDetailView: {
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, .8)',
-    paddingLeft: 20,
-  },
-  moviePrincipalInfo: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginRight: 30,
-  },
-  movieDescriptionView: {
-    width: '100%',
-    height: 211,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-    marginRight: 30,
-  },
-  image: {
-    width: 140,
-    height: 211,
-    borderRadius: 10,
-  },
-  movieTitle: {
-    fontSize: 35,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    lineHeight: 41,
-    marginTop: 6,
-  },
-  movieDate: {
-    fontSize: 13,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: '300',
-    lineHeight: 15,
-    marginTop: 4,
-  },
-  movieCategories: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: '300',
-    lineHeight: 16,
-    marginLeft: 5,
-  },
-  movieInfo: {
-    maxWidth: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: 15,
-    justifyContent: 'space-between',
-    marginRight: 30,
-  },
-  movieDuration: {
-    fontSize: 11,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    lineHeight: 13,
-  },
-  movieOverview: {
-    fontSize: 12,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: '300',
-    lineHeight: 14,
-    marginTop: 20,
-    marginBottom: 20,
-    marginRight: 20,
-  },
-  otherInfoContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  otherInfoLeft: {
-    width: '60%',
-  },
-  otherInfoRight: {
-    width: '40%',
-    position: 'relative',
-    justifyContent: 'center',
-  },
-  otherInfo: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: '100%',
-    marginTop: 15,
-  },
-  otherInfoTitle: {
-    fontSize: 12,
-    color: '#BEBEBE',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    lineHeight: 14,
-  },
-  otherInfoText: {
-    width: '50%',
-    height: 30,
-    fontSize: 12,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    lineHeight: 14,
-    overflow: 'hidden',
-  },
-  movieRating: {
-    marginTop: 40,
-    marginRight: 20,
-  },
-  movieRatingStars: {
-    marginLeft: 20,
-    marginTop: 20,
-  },
-  imageBack: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  rateItem: {
-    position: 'absolute',
-    alignSelf: 'center',
-  },
-  rateText: {
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: 12,
-    lineHeight: 14,
-    color: '#FFFFFF',
-  },
-  recomendedTitle: {
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 15,
-    lineHeight: 18,
-    color: '#FFFFFF',
-  },
-  movieRecommendations: {
-    height: 230,
-  },
-  backIcon: {
-    marginTop: 20,
-    marginBottom: 20,
-    backgroundColor: '#00000000',
-    width: '10%',
-    height: 20,
-  },
-  loadingMovieTemplate: {
-    backgroundColor: '#000000',
-    height: '100%',
-  },
-  loadingMovieTitle: {
-    position: 'absolute',
-    alignSelf: 'center',
-    top: 100,
-    fontSize: 18,
-    color: '#FFFFFF',
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    lineHeight: 19,
-    marginTop: 5,
-  },
-});
+        <View style={styles.buttonsContainer}>
+          <Button
+            title="Add a review"
+            color="#3462FF"
+            buttonStyle={styles.addReviewButton}
+            onPress={() =>
+              navigation.navigate('AddReviewScreen', {
+                movieInstance: movieInstance,
+              })
+            }
+            raised
+          />
+        </View>
+      </ScrollView>
+      <View style={showRatingInput || {display: 'none'}}>
+        <RateInput
+          startRating={previousRating}
+          doneAction={(rating) => doneRateAction(rating)}
+        />
+      </View>
+    </ImageBackground>
+  ) : (
+    <LinearGradient
+      start={{x: 0.01, y: 0.01}}
+      end={{x: 0, y: 1}}
+      colors={[
+        '#000000',
+        '#000000',
+        '#000000',
+        '#000000',
+        '#243676',
+        '#3462FF',
+      ]}
+      style={styles.loadingMovieTemplate}>
+      <View style={styles.loadingMovieView}>
+        <Text style={styles.loadingMovieTitle}>{'Loading movie ...'}</Text>
+      </View>
+    </LinearGradient>
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
     movieInstance: state.movieDetail.movie,
     username: state.registration.username,
+    token: state.registration.token,
+    reviews: state.movieDetail.reviews,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getMovie: (id) => dispatch(movieDetailActions.fetchMovie(id)),
+    getMovie: (id, token) => dispatch(movieDetailActions.fetchMovie(id, token)),
     rateMovie: (movieId, rating, token) =>
       dispatch(movieDetailActions.rateMovie(movieId, rating, token)),
+    getReviews: (id) => dispatch(movieDetailActions.fetchReviews(id)),
+    addToMyList: (movieId, token) =>
+      dispatch(movieDetailActions.addToMyList(movieId, token)),
   };
 };
 

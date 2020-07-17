@@ -23,6 +23,7 @@ class GenreSection extends Component {
       title,
       showButton,
       genreTitleStyle,
+      disableNavigation,
     } = this.props;
 
     return (
@@ -48,6 +49,7 @@ class GenreSection extends Component {
                   movie={item}
                   navigation={navigation}
                   styles={movieStyle}
+                  disableNavigation={disableNavigation}
                 />
               </View>
             )}

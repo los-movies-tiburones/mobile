@@ -17,6 +17,9 @@ import {
   FETCH_RECOMMENDED_MOVIES,
   FETCH_RECOMMENDED_MOVIES_FAILED,
   SET_RECOMMENDED_MOVIES,
+  FETCH_NOW_MOVIES,
+  FETCH_NOW_MOVIES_FAILED,
+  SET_NOW_MOVIES,
 } from '../constants/movieConstants';
 
 export const setTopMoviesByGenre = (movies) => {
@@ -128,5 +131,23 @@ export const fetchRecommendedMovies = (token) => {
 export const fetchRecommendedMoviesFailed = () => {
   return {
     type: FETCH_RECOMMENDED_MOVIES_FAILED,
+  };
+};
+export const setNowMovies = (movies) => {
+  return {
+    type: SET_NOW_MOVIES,
+    nowMovies: movies,
+  };
+};
+
+export const fetchNowMovies = () => {
+  return {
+    type: FETCH_NOW_MOVIES,
+  };
+};
+
+export const fetchNowMoviesFailed = () => {
+  return {
+    type: FETCH_NOW_MOVIES_FAILED,
   };
 };

@@ -1,42 +1,55 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Keyboard} from 'react-native';
 
-import Icon from 'react-native-vector-icons/dist/MaterialIcons';
+//Components
+import NavigationBarOption from '../NavigationBarOption/NavigationBarOption';
 
 const NavigationBar = ({navigation, actualSection}) => {
-  let topColor = actualSection === 'Top' ? '#3462FF' : '#FFFFFF';
-  let libraryColor = actualSection === 'Top' ? '#FFFFFF' : '#3462FF';
+  const [shouldShow, setShouldShow] = useState(true);
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+  }, []);
+
+  const _keyboardDidShow = () => {
+    setShouldShow(false);
+  };
+  const _keyboardDidHide = () => {
+    setShouldShow(true);
+  };
+
   return (
-    <View style={styles.navigationBar}>
+    <View style={shouldShow ? styles.navigationBar : styles.notShowing}>
       <View style={styles.navigationBarView}>
-        <TouchableOpacity
-          style={styles.itemView}
-          onPress={() => navigation.navigate('GenreScreen')}>
-          <Icon
-            style={styles.itemIcon}
-            name="star"
-            size={14}
-            color={topColor}
-          />
-          <Text style={{...styles.itemText, color: topColor}}>
-            Recommendations
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.itemView}
-          onPress={() =>
+        <NavigationBarOption
+          navigationAction={() => navigation.navigate('GenreScreen')}
+          selectedSection={actualSection}
+          title={'Recommended'}
+          icon={'star'}
+        />
+        <NavigationBarOption
+          navigationAction={() =>
             navigation.navigate('Catalogue', {activeSearch: false})
-          }>
-          <Icon
-            style={styles.itemIcon}
-            name="local-movies"
-            size={14}
-            color={libraryColor}
-          />
-          <Text style={{...styles.itemText, color: libraryColor}}>Library</Text>
-        </TouchableOpacity>
+          }
+          selectedSection={actualSection}
+          title={'Library'}
+          icon={'local-movies'}
+        />
+        <NavigationBarOption
+          navigationAction={() => navigation.navigate('ComingSoonScreen')}
+          selectedSection={actualSection}
+          title={'Coming Soon'}
+          icon={'camera-roll'}
+        />
+        <NavigationBarOption
+          navigationAction={() => navigation.navigate('MyListScreen')}
+          selectedSection={actualSection}
+          title={'My List'}
+          icon={'playlist-play'}
+        />
       </View>
     </View>
   );
@@ -55,7 +68,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   navigationBarView: {
-    width: '80%',
+    width: '90%',
     height: '100%',
     backgroundColor: '#000000',
     display: 'flex',
@@ -63,21 +76,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
-  itemView: {
-    width: '50%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  itemIcon: {
-    marginBottom: 5,
-  },
-  itemText: {
-    fontSize: 12,
-    fontFamily: 'Roboto',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    lineHeight: 14,
+  notShowing: {
+    display: 'none',
   },
 });
 

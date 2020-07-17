@@ -1,18 +1,9 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
 
-const axiosService = axios.create({
-  baseURL: 'https://movie-sharkers.herokuapp.com/',
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-export default axiosService;
-
-export const backendRequest = (token) => {
+const backendRequest = (token) => {
   const functionInstance = axios.create({
-    baseURL: 'https://movie-sharkers.herokuapp.com/',
+    baseURL: 'https://movie-shakers-auxiliar.herokuapp.com/',
     timeout: 10000,
     headers: {
       'Content-Type': 'application/json',
@@ -21,3 +12,15 @@ export const backendRequest = (token) => {
   });
   return functionInstance;
 };
+
+const movieAPIRequest = () => {
+  const functionInstance = axios.create({
+    baseURL: 'https://api.themoviedb.org/3/movie/',
+    timeout: 10000,
+  });
+  return functionInstance;
+};
+
+const MOVIE_API_KEY = 'e3189a1e8a7022524d246c91283937ad';
+
+export {backendRequest, movieAPIRequest, MOVIE_API_KEY};

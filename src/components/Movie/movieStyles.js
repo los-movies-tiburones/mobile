@@ -237,6 +237,7 @@ const stylesSmallTop100 = StyleSheet.create({
     display: 'none',
   },
 });
+
 const stylesHorizontalMovieDetail = StyleSheet.create({
   listItem: {
     height: 170,
@@ -277,6 +278,40 @@ const stylesHorizontalMovieDetail = StyleSheet.create({
   },
 });
 
+const stylesNowInCinema = StyleSheet.create({
+  listItem: {
+    marginLeft: 12,
+    marginRight: 12,
+    height: 235,
+    backgroundColor: '#00000000',
+    borderColor: '#eee',
+    marginBottom: 40,
+  },
+  listItemView: {
+    width: 154,
+    height: 234,
+  },
+  image: {
+    width: 154,
+    height: 234,
+    borderRadius: 10,
+  },
+  movieTitle: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    lineHeight: 14,
+    width: '100%',
+    height: 15,
+    marginTop: 10,
+  },
+  movieYear: {
+    display: 'none',
+  },
+});
+
 export {
   stylesSmall,
   stylesMedium,
@@ -286,4 +321,5 @@ export {
   stylesGiant,
   stylesSmallTop100,
   stylesHorizontalMovieDetail,
+  stylesNowInCinema,
 };

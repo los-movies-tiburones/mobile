@@ -14,6 +14,10 @@ import ShowAllGenreScreen from './src/components/ShowAllGenreScreen/ShowAllGenre
 import LoginScreen from './src/components/LoginScreen/LoginScreen';
 import SignUpScreen from './src/components/SignUpScreen/SignUpScreen';
 import LandingScreen from './src/components/LandingScreen/LandingScreen';
+import ComingSoonScreen from './src/components/ComingSoonScreen/ComingSoonScreen';
+import MyListScreen from './src/components/MyListScreen/MyListScreen';
+import AddReviewScreen from './src/components/AddReviewScreen/AddReviewScreen';
+import OnBoardingScreen from './src/components/OnBoardingScreen/OnBoardingScreen';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +30,11 @@ export default class App extends Component {
             <Stack.Screen
               name="LandingScreen"
               component={LandingScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="OnBoardingScreen"
+              component={OnBoardingScreen}
               options={{headerShown: false}}
             />
             <Stack.Screen
@@ -56,6 +65,21 @@ export default class App extends Component {
             <Stack.Screen
               name="Movie"
               component={MovieScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="ComingSoonScreen"
+              component={ComingSoonScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="MyListScreen"
+              component={MyListScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="AddReviewScreen"
+              component={AddReviewScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

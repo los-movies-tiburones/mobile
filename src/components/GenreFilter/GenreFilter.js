@@ -7,7 +7,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
 import * as moviesActions from '../../store/actions/movieActions';
-import BurnedGenres from '../../utils/genres';
+import {BurnedGenres} from '../../utils/genres';
 
 class GenreFilter extends Component {
   state = {

@@ -29,4 +29,9 @@ const formatDate = (date) => {
 const formatDuration = (duration) => {
   return `${Math.floor(duration / 60)}h ${duration % 60} min`;
 };
-export {formatDate, formatDuration};
+
+const getMonth = (date) => {
+  const movieDate = new Date(date);
+  return monthNames[movieDate.getMonth()];
+};
+export {formatDate, formatDuration, getMonth};
